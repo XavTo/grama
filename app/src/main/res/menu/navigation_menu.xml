@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/id_home_page"
+        android:icon="@drawable/ic_home"
+        android:title="@string/desc_home"></item>
+    <item
+        android:id="@+id/id_stat_page"
+        android:icon="@drawable/ic_stat"
+        android:title="@string/desc_stat">
+    </item>
+    <item
+        android:id="@+id/id_duel_page"
+        android:icon="@drawable/ic_duel"
+        android:title="@string/desc_duel"></item>
+</menu>
