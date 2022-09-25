@@ -27,6 +27,6 @@
         <item name="android:textColor">@color/dark_red</item>
     </style>
     <style name="BigTextStyle" parent="DefaultTextStyle">
-        <item name="android:textSize">60sp</item>
+        <item name="android:textSize">40sp</item>
     </style>
 </resources>

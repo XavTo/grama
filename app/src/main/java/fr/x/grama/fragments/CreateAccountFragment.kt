@@ -19,7 +19,7 @@ class CreateAccountFragment : Fragment() {
             containerLoad.commit()
             return@setOnClickListener
         }
-        current.findViewById<Button>(R.id.prof_connexion_button).setOnClickListener {
+        current.findViewById<Button>(R.id.prof_create_account_create).setOnClickListener {
             val emailText = current.findViewById<TextView>(R.id.prof_email_create).text.toString()
             val pseudoText = current.findViewById<TextView>(R.id.prof_pseudo_create).text.toString()
             val passwordText = current.findViewById<TextView>(R.id.prof_password_create).text.toString()
