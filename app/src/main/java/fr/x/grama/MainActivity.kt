@@ -15,19 +15,38 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val containerLoad = supportFragmentManager.beginTransaction()
-        containerLoad.replace(R.id.game_box, HomeGameFragment())
-        containerLoad.addToBackStack(null)
-        containerLoad.commit()
+        val tag = intent.extras?.getString("tag")
+        setupFragment(tag.toString())
         setupNavigation()
         setupSetting()
         setupProf()
+    }
+
+    private fun setupFragment(tag : String) {
+        val containerLoad = supportFragmentManager.beginTransaction()
+        when (tag) {
+            "Stat_Fragment" -> {
+                containerLoad.replace(R.id.game_box, StatFragment(), "Stat_Fragment")
+                findViewById<BottomNavigationView>(R.id.id_navigation).selectedItemId = R.id.id_stat_page
+            }
+            "Duel_Fragment" -> {
+                containerLoad.replace(R.id.game_box, DuelFragment(), "Duel_Fragment")
+                findViewById<BottomNavigationView>(R.id.id_navigation).selectedItemId = R.id.id_duel_page
+            }
+            else -> {
+                containerLoad.replace(R.id.game_box, HomeGameFragment(), "Home_Fragment")
+                findViewById<BottomNavigationView>(R.id.id_navigation).selectedItemId = R.id.id_home_page
+            }
+        }
+        containerLoad.addToBackStack(null)
+        containerLoad.commit()
     }
 
     private fun setupProf() {
         findViewById<ImageView>(R.id.id_prof).setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.putExtra("id", 0)
+            intent.putExtra("tag", findTagFragment())
             startActivity(intent)
         }
     }
@@ -36,8 +55,22 @@ class MainActivity : AppCompatActivity() {
         findViewById<ImageView>(R.id.id_param).setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.putExtra("id", 1)
+            intent.putExtra("tag", findTagFragment())
             startActivity(intent)
         }
+    }
+
+    private fun findTagFragment(): String {
+        var fragment: Fragment? = supportFragmentManager.findFragmentByTag("Home_Fragment")
+        if (fragment != null && fragment.isVisible)
+            return "Home_Fragment"
+        fragment = supportFragmentManager.findFragmentByTag("Stat_Fragment")
+        if (fragment != null && fragment.isVisible)
+            return "Stat_Fragment"
+        fragment = supportFragmentManager.findFragmentByTag("Duel_Fragment")
+        if (fragment != null && fragment.isVisible)
+            return "Duel_Fragment"
+        return "null"
     }
 
     private fun setupNavigation() {
@@ -45,15 +78,15 @@ class MainActivity : AppCompatActivity() {
         navigation.setOnItemSelectedListener {
             when(it.itemId) {
                 R.id.id_home_page -> {
-                    loadFragment(HomeGameFragment())
+                    loadFragment(HomeGameFragment(), "Home_Fragment")
                     return@setOnItemSelectedListener true
                 }
                 R.id.id_stat_page -> {
-                    loadFragment(StatFragment())
+                    loadFragment(StatFragment(), "Stat_Fragment")
                     return@setOnItemSelectedListener true
                 }
                 R.id.id_duel_page -> {
-                    loadFragment(DuelFragment())
+                    loadFragment(DuelFragment(), "Duel_Fragment")
                     return@setOnItemSelectedListener true
                 }
                 else -> false
@@ -61,11 +94,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadFragment(fragment: Fragment) {
+    private fun loadFragment(fragment: Fragment, tag: String) {
         val containerLoad = supportFragmentManager.beginTransaction()
-        containerLoad.replace(R.id.game_box, fragment)
+        containerLoad.replace(R.id.game_box, fragment, tag)
         containerLoad.addToBackStack(null)
         containerLoad.commit()
     }
-
 }

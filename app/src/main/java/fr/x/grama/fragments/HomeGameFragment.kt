@@ -13,7 +13,7 @@ import fr.x.grama.adapter.ButtonAdapter
 class HomeGameFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.fragment_game_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_game_home, container, false)
         val listGame = arrayListOf<GameModel>()
         listGame.add(GameModel("Ortographe"))
         listGame.add(GameModel("Grammaire"))

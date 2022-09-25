@@ -6,8 +6,9 @@
     <string name="home_page_game_3">Conjugaison</string>
     <!-- String Profile -->
     <string name="connexion">Connexion</string>
+    <string name="create_account">Create account</string>
     <string name="error">Bad email or password</string>
-    <string name="email">example@gmail.com</string>
+    <string name="pseudo">Username</string>
     <string name="password">password</string>
     <!-- String Description -->
     <string name="desc_grama">Grama</string>
