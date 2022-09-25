@@ -8,8 +8,10 @@
     <string name="connexion">Connexion</string>
     <string name="create_account">Create account</string>
     <string name="error">Bad email or password</string>
+    <string name="email">example@gmail.com</string>
     <string name="pseudo">Username</string>
     <string name="password">password</string>
+    <string name="already_account">J\'ai déjà un compte</string>
     <!-- String Description -->
     <string name="desc_grama">Grama</string>
     <string name="desc_profile">Profile</string>
