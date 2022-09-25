@@ -4,13 +4,73 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
-        android:src="@drawable/ic_prof"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="50dp"
+        app:cardElevation="25dp"
         app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/desc_cross">
-    </ImageView>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                style="@style/BigTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/connexion">
+            </TextView>
+            <TextView
+                android:id="@+id/prof_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/error"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                style="@style/RedTextStyle">
+            </TextView>
+            <EditText
+                android:id="@+id/prof_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_grey"
+                android:hint="@string/email"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:autofillHints=" "
+                android:inputType="textEmailAddress">
+            </EditText>
+            <EditText
+                android:id="@+id/prof_password"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/light_grey"
+                android:hint="@string/password"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:layout_marginVertical="20dp"
+                android:layout_marginHorizontal="20dp"
+                android:autofillHints=" "
+                android:inputType="textPassword">
+            </EditText>
+            <TextView
+                style="@style/DefaultTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/connexion">
+            </TextView>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
