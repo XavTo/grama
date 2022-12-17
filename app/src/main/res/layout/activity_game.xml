@@ -20,7 +20,7 @@
         android:id="@+id/id_pause_game"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:src="@drawable/ic_pause"
+        android:src="@drawable/ic_cross"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/desc_cross">
