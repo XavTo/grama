@@ -3,7 +3,7 @@
     <item
         android:id="@+id/id_home_page"
         android:icon="@drawable/ic_home"
-        android:title="@string/desc_home"></item>
+        android:title="@string/desc_home" />
     <item
         android:id="@+id/id_stat_page"
         android:icon="@drawable/ic_stat"
@@ -12,5 +12,5 @@
     <item
         android:id="@+id/id_duel_page"
         android:icon="@drawable/ic_duel"
-        android:title="@string/desc_duel"></item>
+        android:title="@string/desc_duel" />
 </menu>

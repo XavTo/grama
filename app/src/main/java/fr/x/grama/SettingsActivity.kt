@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import fr.x.grama.fragments.ConnectedFragment
 import fr.x.grama.fragments.ProfFragment
 import fr.x.grama.fragments.SettingFragment
 
@@ -17,8 +18,12 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         if (id == 1)
             loadFragment(SettingFragment())
-        else
-            loadFragment(ProfFragment())
+        else {
+            if (UserInfo.pseudo == "" && UserInfo.email == "")
+                loadFragment(ProfFragment())
+            else
+                loadFragment(ConnectedFragment())
+        }
         setupCross(tagFragment)
     }
 

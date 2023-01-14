@@ -1,11 +1,13 @@
 package fr.x.grama.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import fr.x.grama.GameActivity
 import fr.x.grama.GameModel
 import fr.x.grama.R
 
@@ -22,7 +24,8 @@ class ButtonAdapter(private val listGame : List<GameModel>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemName.text = listGame[position].name
         holder.itemName.setOnClickListener {
-            holder.itemName.text = "click"
+            val intent = Intent(it.context, GameActivity::class.java)
+            startActivity(it.context, intent, null)
         }
     }
 

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.Grama" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
@@ -28,5 +28,11 @@
     </style>
     <style name="BigTextStyle" parent="DefaultTextStyle">
         <item name="android:textSize">40sp</item>
+    </style>
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="BottomNavigationView.Active" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">20sp</item>
     </style>
 </resources>

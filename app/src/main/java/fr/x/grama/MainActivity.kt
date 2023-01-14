@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
         setupNavigation()
         setupSetting()
         setupProf()
+        val db = DatabaseManager(this).writableDatabase
+        db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_USER (id INTEGER PRIMARY KEY AUTOINCREMENT, EMAIL TEXT, USERNAME TEXT, PASSWORD TEXT)")
+        db.close()
     }
 
     private fun setupFragment(tag : String) {

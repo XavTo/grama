@@ -8,19 +8,19 @@
     android:background="@color/light_grey"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
+    <!-- Top -->
+
+    <ImageView
+        android:layout_width="191dp"
+        android:layout_height="90dp"
+        android:contentDescription="@string/desc_profile"
+        android:src="@drawable/icon_removebg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"
-        style="@style/GreenTextStyle">
-    </TextView>
+        app:layout_constraintVertical_bias="0.0"></ImageView>
 
-    <!-- Top -->
     <ImageView
         android:id="@+id/id_prof"
         android:layout_width="70dp"
@@ -48,6 +48,9 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:background="@color/purple_200"
+        app:itemIconSize="40dp"
+        app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
+        app:itemTextAppearanceInactive="@style/BottomNavigationView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="80dp"
-        android:layout_marginBottom="100dp">
+        android:layout_marginBottom="80dp">
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

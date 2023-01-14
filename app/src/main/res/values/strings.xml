@@ -6,11 +6,19 @@
     <string name="home_page_game_3">Conjugaison</string>
     <!-- String Profile -->
     <string name="connexion">Connexion</string>
+    <string name="duel">Duel</string>
+    <string name="deconnexion">Deconnexion</string>
+    <string name="connected">Vous êtes connecté</string>
+    <string name="not_connected">Vous devez être connecté</string>
+    <string name="wait_connexion">En attente d\'une connexion</string>
+    <string name="host">Hoster une partie</string>
     <string name="create_account">Créer un compte</string>
     <string name="error">Bad email or password</string>
     <string name="email">example@gmail.com</string>
     <string name="pseudo">Username</string>
     <string name="password">password</string>
+    <string name="ip">adresse ip</string>
+    <string name="port">port</string>
     <string name="already_account">J\'ai déjà un compte</string>
     <!-- String Description -->
     <string name="desc_grama">Grama</string>
