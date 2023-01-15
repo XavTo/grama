@@ -10,9 +10,16 @@
         android:id="@+id/text_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:text="@string/home_page_game_1"
-        android:background="@color/purple_500"
+        android:background="@drawable/background_shadow"
+        android:padding="50dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:shadowColor="@color/dark_grey"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="5"
         style="@style/BigTextStyle">
     </TextView>
 

@@ -23,6 +23,8 @@ class GameView : View {
     var path: Path = Path()
 
     fun setGameOrto(gameOrto: GameOrto) {
+        gameOrto.textArray = gameOrto.getText(this.context)
+        gameOrto.textArray.shuffle()
         this.gameOrto = gameOrto
     }
 
@@ -140,7 +142,7 @@ class GameView : View {
         val floatV = if (color1 == Color.GREEN) 1.5f else 1f
         val scaleAnimator = ValueAnimator.ofFloat(values, floatV)
         scaleAnimator.addUpdateListener {
-            gameOrto!!.paintScore.textSize = (gameOrto!!.AlltextSize) * it.animatedValue as Float
+            gameOrto!!.paintScore.textSize = (gameOrto!!.allTextSize) * it.animatedValue as Float
             println(gameOrto!!.paintScore.textSize)
             invalidate()
         }

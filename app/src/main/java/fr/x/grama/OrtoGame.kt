@@ -1,7 +1,9 @@
 package fr.x.grama
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.os.CountDownTimer
 
 
@@ -29,7 +31,7 @@ class GameOrto {
             resources = context.resources
         }
     }
-    val AlltextSize = 140f
+    val allTextSize = 140f
     val screenWidth = resources.displayMetrics.widthPixels
     private val screenHeight = resources.displayMetrics.heightPixels
     val rect: Array<Rect> = arrayOf(Rect(), Rect(), Rect())
@@ -42,15 +44,15 @@ class GameOrto {
     val paint = Paint().apply {
         color = Color.rgb(0, 150, 255)
         setShadowLayer(5f, 5f, 5f, Color.BLACK)
-        textSize = AlltextSize
+        textSize = allTextSize
     }
     val paintScore = Paint().apply {
         color = Color.GREEN
-        textSize = AlltextSize
+        textSize = allTextSize
         setShadowLayer(5f, 5f, 5f, Color.BLACK)
     }
     var wordInd: Int = 0
-    var textArray: MutableList<Word> = getText()
+    var textArray: MutableList<Word> = mutableListOf()
     private var y: Array<Float> = arrayOf(screenHeight / 2f, screenHeight / 2f + 200, screenHeight / 2f + 400f)
     var score: Int = 0
     var endGame: Boolean = false
@@ -78,11 +80,25 @@ class GameOrto {
         }
     }
 
-    private fun getText() : MutableList<Word> {
+    fun getText(context: Context) : MutableList<Word> {
         val textArray = mutableListOf<Word>()
+        val db = DatabaseManager(context).readableDatabase
 
-        textArray.add(Word(arrayOf("comment", "commant", "coment"), arrayOf(true, false, false)))
+        val cursor = db.rawQuery("SELECT * FROM ${DatabaseManager.TABLE_WORD}", null)
+        if (cursor.moveToFirst()) {
+            do {
+                val word = arrayOf(cursor.getString(1), cursor.getString(2), cursor.getString(3))
+                val good = arrayOf(false, false, true)
+                val shuffledList = word.zip(good).shuffled()
+                val wordShuffled = shuffledList.map { it.first }.toTypedArray()
+                val goodShuffled = shuffledList.map { it.second }.toTypedArray()
+                textArray.add(Word(wordShuffled, goodShuffled))
+            } while (cursor.moveToNext())
+        }
+        cursor.close()
+
         textArray.add(Word(arrayOf("roblochon", "reblochon", "roblechon"), arrayOf(false, true, false)))
+        textArray.add(Word(arrayOf("comment", "commant", "coment"), arrayOf(true, false, false)))
         textArray.add(Word(arrayOf("pome", "pom", "pomme"), arrayOf(false, false, true)))
         return textArray
     }
