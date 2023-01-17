@@ -4,12 +4,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 
-@SuppressLint("SetTextI18n")
-class GameView : View {
+class GameViewOrto : View {
     private var gameOrto: GameOrto? = null
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
@@ -50,7 +50,7 @@ class GameView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         gameOrto?.let {
-            canvas.drawText("Score: ${it.score}", 0f, 180f, it.paintScore)
+            canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
             canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - 200).toFloat(), 700f, it.paint)
             for (i in 0..2) {
                 pos = animator?.animatedFraction ?: 0f
@@ -116,7 +116,7 @@ class GameView : View {
                     for (i in 0..2) {
                         if (it.rect[i].contains(event.x.toInt(), event.y.toInt()) && it.textArray[it.wordInd].good[i]) {
                             it.textArray[it.wordInd].word[i] = ""
-                            updateScore(it.score + 1, Color.GREEN, Color.CYAN)
+                            updateScore(it.getScore() + 1, Color.GREEN, Color.CYAN)
                             performClick()
                         }
                     }
@@ -128,6 +128,12 @@ class GameView : View {
 
     fun update() {
         gameOrto?.update()
+        if (gameOrto?.endGame == true) {
+            gameOrto?.let {
+                val bundle = Bundle()
+                bundle.putInt("score", it.getScore())
+            }
+        }
         invalidate()
     }
 
@@ -157,7 +163,7 @@ class GameView : View {
                 invalidate()
             }
         })
-        gameOrto!!.score = newScore
+        gameOrto!!.setScore(newScore)
         animatorSet.start()
     }
 }

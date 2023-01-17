@@ -2,8 +2,8 @@
     <string name="app_name">Grama</string>
     <!-- String home -->
     <string name="home_page_game_1">Ortographe</string>
-    <string name="home_page_game_2">Grammaire</string>
-    <string name="home_page_game_3">Conjugaison</string>
+    <string name="home_page_game_2">Définitions</string>
+    <string name="home_page_game_3">Grammaire</string>
     <!-- String Profile -->
     <string name="connexion">Connexion</string>
     <string name="duel">Duel</string>

@@ -3,8 +3,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <fr.x.grama.GameView
-        android:id="@+id/game_view"
+    <fr.x.grama.GameViewOrto
+        android:id="@+id/gameViewOrto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <fr.x.grama.GameViewDef
+        android:id="@+id/gameViewDef"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

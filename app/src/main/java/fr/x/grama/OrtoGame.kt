@@ -30,7 +30,9 @@ class GameOrto {
         fun init(context: Context) {
             resources = context.resources
         }
+        var score: Int = 0
     }
+    var endGame: Boolean = false
     val allTextSize = 140f
     val screenWidth = resources.displayMetrics.widthPixels
     private val screenHeight = resources.displayMetrics.heightPixels
@@ -54,8 +56,6 @@ class GameOrto {
     var wordInd: Int = 0
     var textArray: MutableList<Word> = mutableListOf()
     private var y: Array<Float> = arrayOf(screenHeight / 2f, screenHeight / 2f + 200, screenHeight / 2f + 400f)
-    var score: Int = 0
-    var endGame: Boolean = false
     var timeLeft: Float = 0f
     private val timer = object : CountDownTimer(5000, 100) {
         override fun onTick(millisUntilFinished: Long) {
@@ -88,7 +88,7 @@ class GameOrto {
         if (cursor.moveToFirst()) {
             do {
                 val word = arrayOf(cursor.getString(1), cursor.getString(2), cursor.getString(3))
-                val good = arrayOf(false, false, true)
+                val good = arrayOf(true, false, false)
                 val shuffledList = word.zip(good).shuffled()
                 val wordShuffled = shuffledList.map { it.first }.toTypedArray()
                 val goodShuffled = shuffledList.map { it.second }.toTypedArray()
@@ -96,11 +96,15 @@ class GameOrto {
             } while (cursor.moveToNext())
         }
         cursor.close()
-
-        textArray.add(Word(arrayOf("roblochon", "reblochon", "roblechon"), arrayOf(false, true, false)))
-        textArray.add(Word(arrayOf("comment", "commant", "coment"), arrayOf(true, false, false)))
-        textArray.add(Word(arrayOf("pome", "pom", "pomme"), arrayOf(false, false, true)))
         return textArray
+    }
+
+    fun getScore(): Int {
+        return score
+    }
+
+    fun setScore(newScore: Int) {
+        score = newScore
     }
 }
 

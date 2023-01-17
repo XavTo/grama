@@ -15,9 +15,9 @@ class HomeGameFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_game_home, container, false)
         val listGame = arrayListOf<GameModel>()
-        listGame.add(GameModel("Ortographe"))
-        listGame.add(GameModel("Grammaire"))
-        listGame.add(GameModel("Conjugaison"))
+        listGame.add(GameModel(getString(R.string.home_page_game_1)))
+        listGame.add(GameModel(getString(R.string.home_page_game_2)))
+        listGame.add(GameModel(getString(R.string.home_page_game_3)))
         val listView = view.findViewById<RecyclerView>(R.id.list_view)
         listView.adapter = ButtonAdapter(listGame)
         return view

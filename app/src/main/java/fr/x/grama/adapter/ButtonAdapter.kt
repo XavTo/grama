@@ -24,7 +24,8 @@ class ButtonAdapter(private val listGame : List<GameModel>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemName.text = listGame[position].name
         holder.itemName.setOnClickListener {
-            val intent = Intent(it.context, GameActivity::class.java)
+            val intent = Intent(holder.itemName.context, GameActivity::class.java)
+            intent.putExtra("gameType", position)
             startActivity(it.context, intent, null)
         }
     }

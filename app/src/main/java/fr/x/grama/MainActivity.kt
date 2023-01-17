@@ -23,9 +23,7 @@ class MainActivity : AppCompatActivity() {
         val db = DatabaseManager(this).writableDatabase
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_USER (id INTEGER PRIMARY KEY AUTOINCREMENT, EMAIL TEXT, USERNAME TEXT, PASSWORD TEXT)")
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_WORD (id INTEGER PRIMARY KEY AUTOINCREMENT, VWORD TEXT, BADWORD TEXT, BADWORD2 TEXT)")
-        db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('reblochon', 'roblochon', 'roblechon')")
-        db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('comment', 'commant', 'coment')")
-        db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('pomme', 'pome', 'pom')")
+        db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_DEF (id INTEGER PRIMARY KEY AUTOINCREMENT, DEFINITION TEXT, WORD TEXT)")
         db.close()
     }
 

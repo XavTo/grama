@@ -6,13 +6,21 @@ import androidx.appcompat.app.AppCompatActivity
 
 class GameActivity : AppCompatActivity() {
     private var lastFrameTime = 0L
-    private var gameView: GameView? = null
+    private var gameViewOrto: GameViewOrto? = null
+    private var gameViewDef: GameViewDef? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
-        gameView = findViewById(R.id.game_view)
-        GameOrto.init(this)
-        gameView?.setGameOrto(GameOrto())
+        val gameType = intent.extras!!.getInt("gameType")
+        if (gameType == 0) {
+            gameViewOrto = findViewById(R.id.gameViewOrto)
+            GameOrto.init(this)
+            gameViewOrto?.setGameOrto(GameOrto())
+        } else if (gameType == 1) {
+            gameViewDef = findViewById(R.id.gameViewDef)
+            GameDef.init(this)
+            gameViewDef?.setGameDef(GameDef())
+        }
     }
 
     override fun onResume() {
@@ -25,7 +33,11 @@ class GameActivity : AppCompatActivity() {
                 }
                 val deltaTime = currentTime - lastFrameTime
                 lastFrameTime = currentTime
-                gameView?.update()
+                if (gameViewOrto != null) {
+                    gameViewOrto?.update()
+                } else if (gameViewDef != null) {
+                    gameViewDef?.update()
+                }
                 Choreographer.getInstance().postFrameCallback(this)
             }
         })
