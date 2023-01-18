@@ -1,6 +1,5 @@
 package fr.x.grama
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
@@ -24,39 +23,11 @@ data class Word(val word: Array<String>, val good: Array<Boolean>) {
     }
 }
 
-class GameOrto {
-    companion object {
-        private lateinit var resources: Resources
-        fun init(context: Context) {
-            resources = context.resources
-        }
-        var score: Int = 0
-    }
-    var endGame: Boolean = false
-    val allTextSize = 140f
-    val screenWidth = resources.displayMetrics.widthPixels
-    private val screenHeight = resources.displayMetrics.heightPixels
+class GameOrto : GameClass() {
     val rect: Array<Rect> = arrayOf(Rect(), Rect(), Rect())
-    val rectPaint = Paint().apply {
-        color = Color.RED
-        strokeWidth = 5f
-        style = Paint.Style.FILL
-        setShadowLayer(5f, 5f, 5f, Color.GRAY)
-    }
-    val paint = Paint().apply {
-        color = Color.rgb(0, 150, 255)
-        setShadowLayer(5f, 5f, 5f, Color.BLACK)
-        textSize = allTextSize
-    }
-    val paintScore = Paint().apply {
-        color = Color.GREEN
-        textSize = allTextSize
-        setShadowLayer(5f, 5f, 5f, Color.BLACK)
-    }
     var wordInd: Int = 0
     var textArray: MutableList<Word> = mutableListOf()
-    private var y: Array<Float> = arrayOf(screenHeight / 2f, screenHeight / 2f + 200, screenHeight / 2f + 400f)
-    var timeLeft: Float = 0f
+    private var y: Array<Float> = arrayOf(super.screenHeight / 2f, super.screenHeight / 2f + 200, super.screenHeight / 2f + 400f)
     private val timer = object : CountDownTimer(5000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
@@ -97,14 +68,6 @@ class GameOrto {
         }
         cursor.close()
         return textArray
-    }
-
-    fun getScore(): Int {
-        return score
-    }
-
-    fun setScore(newScore: Int) {
-        score = newScore
     }
 }
 

@@ -1,35 +1,18 @@
 package fr.x.grama
 
 import android.content.Context
-import android.content.res.Resources
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.Rect
 import android.os.CountDownTimer
 
-class GameDef {
-    companion object {
-        private lateinit var resources: Resources
-        fun init(context: Context) {
-            resources = context.resources
-        }
-        var score: Int = 0
-    }
-
-    val screenWidth = resources.displayMetrics.widthPixels
-    private val screenHeight = resources.displayMetrics.heightPixels
-    var endGame: Boolean = false
-    private val allTextSize = 140f
-    val paint = Paint().apply {
-        color = Color.rgb(0, 150, 255)
-        setShadowLayer(5f, 5f, 5f, Color.BLACK)
-        textSize = allTextSize
-    }
-
-    var word: String = ""
-    var definition: String = ""
-    var goodWord: Boolean = false
-    var timeLeft: Float = 0f
-    private val timer = object : CountDownTimer(5000, 100) {
+class GameDef : GameClass() {
+    var listWord: MutableList<String> = mutableListOf()
+    var listDefinition: MutableList<String> = mutableListOf()
+    var word = ""
+    var definition = ""
+    private var y: Float = super.screenHeight / 2f
+    var rect: Rect = Rect(50, 50, 200, 150)
+    var rectAnswer: Rect = Rect(50, 50, 200, 150)
+    private val timer = object : CountDownTimer(15000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
         }
@@ -38,18 +21,39 @@ class GameDef {
         }
     }.start()
 
-    fun getScore(): String {
-        return score.toString()
-    }
-
     fun update() {
+        rect.set(screenWidth / 10, (y - 140).toInt(), screenWidth - (screenWidth / 10), (y + 20).toInt())
+        rectAnswer.set(screenWidth / 6, (super.screenHeight - 300).toInt(), screenWidth - (screenWidth / 6), (super.screenHeight - 100).toInt())
         if (timeLeft <= 0f) {
             endGame = true
         }
-        if (goodWord) {
-            score++
-            goodWord = false
-            timer.start()
+    }
+
+    fun correctAnswer() {
+        listWord.removeAt(0)
+        listDefinition.removeAt(0)
+        word = listWord[0]
+        definition = listDefinition[0]
+        timer.start()
+    }
+
+    fun setText(context: Context) {
+        val db = DatabaseManager(context).readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM ${DatabaseManager.TABLE_DEF}", null)
+        val tempWord: MutableList<String> = mutableListOf()
+        val tempDef: MutableList<String> = mutableListOf()
+        if (cursor.moveToFirst()) {
+            do {
+                tempDef.add(cursor.getString(1))
+                tempWord.add(cursor.getString(2))
+            } while (cursor.moveToNext())
         }
+        cursor.close()
+        db.close()
+        val shuffledList = tempWord.zip(tempDef).shuffled()
+        listWord = shuffledList.map { it.first }.toMutableList()
+        listDefinition = shuffledList.map { it.second }.toMutableList()
+        word = listWord[0]
+        definition = listDefinition[0]
     }
 }

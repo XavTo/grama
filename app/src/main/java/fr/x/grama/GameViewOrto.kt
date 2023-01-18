@@ -51,7 +51,7 @@ class GameViewOrto : View {
         super.onDraw(canvas)
         gameOrto?.let {
             canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
-            canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - 200).toFloat(), 700f, it.paint)
+            canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - 280).toFloat(), 700f, it.paint)
             for (i in 0..2) {
                 pos = animator?.animatedFraction ?: 0f
                 newStartColor = evaluateColor(gradientStartColor, gradientEndColor, pos)
@@ -116,7 +116,7 @@ class GameViewOrto : View {
                     for (i in 0..2) {
                         if (it.rect[i].contains(event.x.toInt(), event.y.toInt()) && it.textArray[it.wordInd].good[i]) {
                             it.textArray[it.wordInd].word[i] = ""
-                            updateScore(it.getScore() + 1, Color.GREEN, Color.CYAN)
+                            it.updateScore(it.getScore() + 1, Color.GREEN, Color.CYAN)
                             performClick()
                         }
                     }
@@ -135,35 +135,5 @@ class GameViewOrto : View {
             }
         }
         invalidate()
-    }
-
-    private fun updateScore(newScore: Int, color1: Int, color2: Int) {
-        val colorAnimator = ValueAnimator.ofObject(ArgbEvaluator(), color1, color2)
-        colorAnimator.addUpdateListener {
-            gameOrto!!.paintScore.color = it.animatedValue as Int
-            invalidate()
-        }
-        colorAnimator.duration = 500
-        val values = if (color1 == Color.GREEN) 1f else 1.5f
-        val floatV = if (color1 == Color.GREEN) 1.5f else 1f
-        val scaleAnimator = ValueAnimator.ofFloat(values, floatV)
-        scaleAnimator.addUpdateListener {
-            gameOrto!!.paintScore.textSize = (gameOrto!!.allTextSize) * it.animatedValue as Float
-            println(gameOrto!!.paintScore.textSize)
-            invalidate()
-        }
-        scaleAnimator.duration = 500
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(colorAnimator, scaleAnimator)
-        animatorSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                if (color1 == Color.GREEN) {
-                    updateScore(newScore, color2, Color.GREEN)
-                }
-                invalidate()
-            }
-        })
-        gameOrto!!.setScore(newScore)
-        animatorSet.start()
     }
 }

@@ -2,6 +2,9 @@ package fr.x.grama
 
 import android.os.Bundle
 import android.view.Choreographer
+import android.view.View
+import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
 class GameActivity : AppCompatActivity() {
@@ -10,15 +13,15 @@ class GameActivity : AppCompatActivity() {
     private var gameViewDef: GameViewDef? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_game)
         val gameType = intent.extras!!.getInt("gameType")
+        GameClass.init(this)
         if (gameType == 0) {
+            setContentView(R.layout.activity_game_orto)
             gameViewOrto = findViewById(R.id.gameViewOrto)
-            GameOrto.init(this)
             gameViewOrto?.setGameOrto(GameOrto())
         } else if (gameType == 1) {
+            setContentView(R.layout.activity_game_def)
             gameViewDef = findViewById(R.id.gameViewDef)
-            GameDef.init(this)
             gameViewDef?.setGameDef(GameDef())
         }
     }
