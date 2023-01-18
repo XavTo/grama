@@ -19,15 +19,13 @@ class DuelFragment : Fragment() {
         current.findViewById<Button>(R.id.duel_connexion_button).setOnClickListener {
             val ip = current.findViewById<android.widget.EditText>(R.id.adresse_ip).text.toString()
             val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
-            if (ip == "" || port == "") {
-                Toast.makeText(requireContext(), "Entrez une adresse ip et un port", Toast.LENGTH_SHORT).show()
+            if (ip == "" || port == "" || port.toIntOrNull() == null || ip.split(".").size != 4) {
+                Toast.makeText(requireContext(), "Entrez une adresse ip et un port valide", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
-            containerLoad.replace(R.id.duel_layout, NetworkFragment(ip.toLong(), port.toLong()))
-            containerLoad.addToBackStack(null)
-            containerLoad.commit()
-            return@setOnClickListener
+            val networkServ = fr.x.grama.NetworkClass()
+            Thread{ networkServ.server(port.toInt()) }.start()
+            networkServ.client(ip, port.toInt())
         }
         current.findViewById<Button>(R.id.duel_host_button).setOnClickListener {
             val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()

@@ -25,6 +25,13 @@ class MainActivity : AppCompatActivity() {
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_WORD (id INTEGER PRIMARY KEY AUTOINCREMENT, VWORD TEXT, BADWORD TEXT, BADWORD2 TEXT)")
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_DEF (id INTEGER PRIMARY KEY AUTOINCREMENT, DEFINITION TEXT, WORD TEXT)")
         db.close()
+        if (UserInfo.sp == null) {
+            UserInfo.setSp(this)
+        }
+        UserInfo.email = UserInfo.sp?.getString("Unm", "").toString()
+        UserInfo.pseudo = UserInfo.sp?.getString("Psw", "").toString()
+        println("laaa " + UserInfo.email)
+        println("laaa " + UserInfo.pseudo)
     }
 
     private fun setupFragment(tag : String) {

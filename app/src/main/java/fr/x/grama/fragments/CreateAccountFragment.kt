@@ -14,6 +14,7 @@ import fr.x.grama.R
 import fr.x.grama.UserInfo
 import org.mindrot.jbcrypt.BCrypt
 
+
 class CreateAccountFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val current = inflater.inflate(R.layout.fragment_profil_create, container, false)
@@ -41,6 +42,10 @@ class CreateAccountFragment : Fragment() {
                 Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
             UserInfo.email = emailText
             UserInfo.pseudo = pseudoText
+            val ed = UserInfo.sp?.edit()
+            ed?.putString("Unm", UserInfo.email)
+            ed?.putString("Psw", UserInfo.pseudo)
+            ed?.apply()
             if (result != (-1).toLong()) {
                 val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
                 containerLoad.replace(R.id.setting_box, ConnectedFragment())

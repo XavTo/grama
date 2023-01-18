@@ -1,7 +1,5 @@
 package fr.x.grama
 import android.content.Context
-import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.Rect
 import android.os.CountDownTimer
 
