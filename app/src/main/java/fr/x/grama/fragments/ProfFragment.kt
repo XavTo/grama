@@ -58,7 +58,7 @@ class ProfFragment : Fragment() {
                 ed?.putString("Psw", UserInfo.pseudo)
                 ed?.apply()
                 val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
-                containerLoad.replace(R.id.setting_box, ConnectedFragment())
+                containerLoad.replace(R.id.content_frame_profil, ConnectedFragment())
                 containerLoad.addToBackStack(null)
                 containerLoad.commit()
             } else {

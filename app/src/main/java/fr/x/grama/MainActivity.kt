@@ -1,6 +1,8 @@
 package fr.x.grama
 
 import android.content.Intent
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -24,14 +26,37 @@ class MainActivity : AppCompatActivity() {
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_USER (id INTEGER PRIMARY KEY AUTOINCREMENT, EMAIL TEXT, USERNAME TEXT, PASSWORD TEXT)")
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_WORD (id INTEGER PRIMARY KEY AUTOINCREMENT, VWORD TEXT, BADWORD TEXT, BADWORD2 TEXT)")
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_DEF (id INTEGER PRIMARY KEY AUTOINCREMENT, DEFINITION TEXT, WORD TEXT)")
+        fillDbIfEmpty(db)
         db.close()
         if (UserInfo.sp == null) {
             UserInfo.setSp(this)
         }
         UserInfo.email = UserInfo.sp?.getString("Unm", "").toString()
         UserInfo.pseudo = UserInfo.sp?.getString("Psw", "").toString()
-        println("laaa " + UserInfo.email)
-        println("laaa " + UserInfo.pseudo)
+    }
+
+    private fun fillDbIfEmpty(db: SQLiteDatabase) {
+        var cursor: Cursor? = null
+        try {
+            cursor = db.rawQuery("SELECT * FROM TABLE_WORD", null)
+            if (cursor.count == 0) {
+                db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('reblochon', 'roblochon', 'roblechon')")
+                db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('comment', 'commant', 'coment')")
+                db.execSQL("INSERT INTO TABLE_WORD (VWORD, BADWORD, BADWORD2) VALUES ('pomme', 'pome', 'pom')")
+            }
+        } finally {
+            cursor?.close()
+        }
+        try {
+            cursor = db.rawQuery("SELECT * FROM TABLE_DEF", null)
+            if (cursor.count == 0) {
+                db.execSQL("INSERT INTO TABLE_DEF (DEFINITION, WORD) VALUES ('Fromage au lait de vache, à pâte grasse et de saveur douce, fabriqué en Savoie.', 'reblochon')")
+                db.execSQL("INSERT INTO TABLE_DEF (DEFINITION, WORD) VALUES ('Sauce froide composée d''huile, d''œufs et d''assaisonnements.', 'mayonnaise')")
+                db.execSQL("INSERT INTO TABLE_DEF (DEFINITION, WORD) VALUES ('moyen de transport urbain individuel, composé d''une plaque métallique montée sur deux roues.', 'trottinette')")
+            }
+        } finally {
+            cursor?.close()
+        }
     }
 
     private fun setupFragment(tag : String) {

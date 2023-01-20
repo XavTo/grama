@@ -26,6 +26,19 @@
                 android:gravity="center"
                 android:text="@string/wait_connexion">
             </TextView>
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:indeterminate="true"
+                android:visibility="visible" />
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="129dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/annuler" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

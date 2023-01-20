@@ -25,7 +25,7 @@ class GameOrto : GameClass() {
     val rect: Array<Rect> = arrayOf(Rect(), Rect(), Rect())
     var wordInd: Int = 0
     var textArray: MutableList<Word> = mutableListOf()
-    private var y: Array<Float> = arrayOf(super.screenHeight / 2f, super.screenHeight / 2f + 200, super.screenHeight / 2f + 400f)
+    private var y: Array<Float> = arrayOf(super.screenHeight / 2f, super.screenHeight / 2f + 240, super.screenHeight / 2f + 480f)
     private val timer = object : CountDownTimer(5000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
@@ -38,7 +38,7 @@ class GameOrto : GameClass() {
 
     fun update() {
         for (i in 0..2) {
-            rect[i].set(screenWidth / 10, (y[i] - 140).toInt(), screenWidth - (screenWidth / 10), (y[i] + 20).toInt())
+            rect[i].set(screenWidth / 10, (y[i] - 165).toInt(), screenWidth - (screenWidth / 10), (y[i] + 20).toInt())
         }
         if (textArray[wordInd].word[0] == "" || textArray[wordInd].word[1] == "" || textArray[wordInd].word[2] == "") {
             textArray.removeAt(wordInd)

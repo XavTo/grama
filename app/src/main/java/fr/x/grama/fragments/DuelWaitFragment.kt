@@ -6,19 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import fr.x.grama.NetworkClass
 import fr.x.grama.R
-import fr.x.grama.UserInfo
 
-class ConnectedFragment : Fragment() {
+class DuelWaitFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val current = inflater.inflate(R.layout.fragment_profil_connected, container, false)
-        // display the pseudo
-        current.findViewById<android.widget.TextView>(R.id.connected_pseudo).text = UserInfo.pseudo
-        current.findViewById<Button>(R.id.prof_disconnect_button).setOnClickListener {
-            UserInfo.email = ""
-            UserInfo.pseudo = ""
+        val current = inflater.inflate(R.layout.fragment_duel_wait_connexion, container, false)
+        current.findViewById<Button>(R.id.button_cancel).setOnClickListener {
+            NetworkClass().server.close()
             val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
-            containerLoad.replace(R.id.setting_box, ProfFragment())
+            containerLoad.replace(this.id, DuelFragment())
             containerLoad.addToBackStack(null)
             containerLoad.commit()
             return@setOnClickListener

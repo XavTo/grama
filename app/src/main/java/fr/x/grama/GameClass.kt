@@ -8,7 +8,6 @@ import android.graphics.Paint
 
 open class GameClass {
     companion object {
-        var editTextId: Int = 0
         private lateinit var resources: Resources
         fun init(context: Context) {
             resources = context.resources
@@ -16,9 +15,9 @@ open class GameClass {
     }
     var sco: Int = 0
     var endGame: Boolean = false
-    private val allTextSize = 140f
     val screenWidth = resources.displayMetrics.widthPixels
     val screenHeight = resources.displayMetrics.heightPixels
+    val allTextSize = 140f / 1080f * screenWidth
     var timeLeft: Float = 0f
 
     val paint = Paint().apply {
@@ -41,7 +40,7 @@ open class GameClass {
         color = Color.GREEN
         strokeWidth = 5f
         style = Paint.Style.FILL
-        setShadowLayer(50f, 50f, 50f, Color.BLACK)
+        setShadowLayer(20f, 20f, 20f, Color.BLACK)
     }
 
     fun getScore(): Int {

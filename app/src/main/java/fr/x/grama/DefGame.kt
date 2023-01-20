@@ -5,13 +5,12 @@ import android.graphics.Rect
 import android.os.CountDownTimer
 
 class GameDef : GameClass() {
-    var listWord: MutableList<String> = mutableListOf()
-    var listDefinition: MutableList<String> = mutableListOf()
+    private var listWord: MutableList<String> = mutableListOf()
+    private var listDefinition: MutableList<String> = mutableListOf()
     var word = ""
     var definition = ""
     private var y: Float = super.screenHeight / 2f
     var rect: Rect = Rect(50, 50, 200, 150)
-    var rectAnswer: Rect = Rect(50, 50, 200, 150)
     private val timer = object : CountDownTimer(15000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
@@ -23,7 +22,6 @@ class GameDef : GameClass() {
 
     fun update() {
         rect.set(screenWidth / 10, (y - 140).toInt(), screenWidth - (screenWidth / 10), (y + 20).toInt())
-        rectAnswer.set(screenWidth / 6, (super.screenHeight - 300).toInt(), screenWidth - (screenWidth / 6), (super.screenHeight - 100).toInt())
         if (timeLeft <= 0f) {
             endGame = true
         }

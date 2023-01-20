@@ -15,75 +15,76 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
         <LinearLayout
             android:id="@+id/duel_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 style="@style/BigTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/duel">
-            </TextView>
+                android:text="@string/duel"></TextView>
+
             <TextView
                 android:id="@+id/prof_error"
+                style="@style/RedTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/error"
-                android:gravity="center"
                 android:layout_gravity="center"
-                android:visibility="gone"
-                style="@style/RedTextStyle">
-            </TextView>
+                android:gravity="center"
+                android:text="@string/error"
+                android:visibility="gone"></TextView>
+
             <EditText
                 android:id="@+id/adresse_ip"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_grey"
-                android:hint="@string/ip"
-                android:textSize="30sp"
-                android:gravity="center"
+                android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
-                android:layout_marginHorizontal="20dp"
                 android:autofillHints=" "
-                android:inputType="textEmailAddress">
-            </EditText>
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:hint="@string/ip"
+                android:inputType="textEmailAddress"
+                android:textSize="30sp"></EditText>
+
             <EditText
                 android:id="@+id/port"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_grey"
-                android:hint="@string/port"
-                android:textSize="30sp"
-                android:gravity="center"
-                android:layout_marginBottom="20dp"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginBottom="20dp"
                 android:autofillHints=" "
-                android:inputType="textPassword">
-            </EditText>
+                android:background="@color/light_grey"
+                android:gravity="center"
+                android:hint="@string/port"
+                android:inputType="number"
+                android:textSize="30sp"></EditText>
+
             <Button
                 android:id="@+id/duel_connexion_button"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
                 android:background="@color/black"
                 android:text="@string/connexion"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp">
-            </Button>
+                android:textColor="@color/white"></Button>
+
             <Button
                 android:id="@+id/duel_host_button"
                 android:layout_width="150dp"
                 android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
                 android:background="@color/black"
                 android:text="@string/host"
-                android:textColor="@color/white"
-                android:layout_gravity="center"
-                android:layout_marginBottom="15dp">
-            </Button>
+                android:textColor="@color/white"></Button>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

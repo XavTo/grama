@@ -53,10 +53,11 @@ class GameViewOrto : View {
             canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
             canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - 280).toFloat(), 700f, it.paint)
             for (i in 0..2) {
+                canvas.save()
                 pos = animator?.animatedFraction ?: 0f
                 newStartColor = evaluateColor(gradientStartColor, gradientEndColor, pos)
                 newEndColor = evaluateColor(gradientEndColor, gradientStartColor, pos)
-                it.rectPaint.setShadowLayer(20f, 10f, 10f, Color.BLACK)
+                val shadowRect = RectF(it.rect[i])
                 it.rectPaint.shader = LinearGradient(
                     it.rect[i].left.toFloat(),
                     it.rect[i].top.toFloat(),
@@ -71,10 +72,11 @@ class GameViewOrto : View {
                     it.rect[i].top.toFloat(),
                     it.rect[i].right.toFloat(),
                     it.rect[i].bottom.toFloat(),
-                    50f,
-                    50f,
+                    1f,
+                    1f,
                     Path.Direction.CW
                 )
+                canvas.drawRect(shadowRect, it.rectPaint2)
                 canvas.clipPath(path)
                 canvas.drawRect(it.rect[i], it.rectPaint)
                 it.paint.getTextBounds(it.textArray[it.wordInd].word[i], 0, it.textArray[it.wordInd].word[i].length, tempRect)
@@ -84,6 +86,7 @@ class GameViewOrto : View {
                     it.rect[i].centerY() + tempRect.height() / 2f,
                     it.paint
                 )
+                canvas.restore()
             }
         }
     }

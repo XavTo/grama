@@ -6,6 +6,11 @@
     android:background="@color/light_grey"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <FrameLayout
+        android:id="@+id/content_frame_connected"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +31,14 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/connected">
+            </TextView>
+            <TextView
+                android:id="@+id/connected_pseudo"
+                style="@style/BigTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="">
             </TextView>
             <Button
                 android:id="@+id/prof_disconnect_button"

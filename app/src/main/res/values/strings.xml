@@ -18,6 +18,7 @@
     <string name="pseudo">Username</string>
     <string name="password">password</string>
     <string name="ip">adresse ip</string>
+    <string name="annuler">annuler</string>
     <string name="port">port</string>
     <string name="already_account">J\'ai déjà un compte</string>
     <!-- String Description -->
@@ -28,4 +29,6 @@
     <string name="desc_stat">Statistics</string>
     <string name="desc_duel">Duel</string>
     <string name="desc_cross">GoBack</string>
+    <string name="background">background</string>
+    <string name="r_ponse">réponse</string>
 </resources>

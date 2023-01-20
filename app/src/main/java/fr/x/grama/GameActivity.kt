@@ -1,9 +1,11 @@
 package fr.x.grama
 
+import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Choreographer
-import android.view.View
-import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
@@ -22,7 +24,14 @@ class GameActivity : AppCompatActivity() {
         } else if (gameType == 1) {
             setContentView(R.layout.activity_game_def)
             gameViewDef = findViewById(R.id.gameViewDef)
-            gameViewDef?.setGameDef(GameDef())
+            val editText = findViewById<EditText>(R.id.edit_text)
+            val handler = Handler(Looper.getMainLooper())
+            handler.postDelayed({
+                editText?.requestFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+            }, 200)
+            gameViewDef?.setGameDef(GameDef(), editText)
         }
     }
 

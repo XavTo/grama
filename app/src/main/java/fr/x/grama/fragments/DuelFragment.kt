@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import fr.x.grama.NetworkClass
 import fr.x.grama.R
 import fr.x.grama.UserInfo
 
@@ -23,16 +24,27 @@ class DuelFragment : Fragment() {
                 Toast.makeText(requireContext(), "Entrez une adresse ip et un port valide", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val networkServ = fr.x.grama.NetworkClass()
-            Thread{ networkServ.server(port.toInt()) }.start()
-            networkServ.client(ip, port.toInt())
+            val networkServ = NetworkClass()
+            Thread{ networkServ.connect(ip, port.toInt()) }.start()
         }
         current.findViewById<Button>(R.id.duel_host_button).setOnClickListener {
-            val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
-            if (port == "") {
-                Toast.makeText(requireContext(), "Entrez un port", Toast.LENGTH_SHORT).show()
+            val port: Int = current.findViewById<android.widget.EditText>(R.id.port).text.toString().toInt()
+            val networkServ = NetworkClass()
+            val ret = networkServ.checkPort(port)
+            if (ret == 1) {
+                Toast.makeText(requireContext(), "Permission refusée", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            if (ret == 2) {
+                Toast.makeText(requireContext(), "Le port est déjà utilisé", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            Thread{ networkServ.start(port) }.start()
+            Thread{ networkServ.connect("localhost", port) }.start()
+            val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
+            containerLoad.replace(this.id, DuelWaitFragment())
+            containerLoad.addToBackStack(null)
+            containerLoad.commit()
             return@setOnClickListener
         }
         return current
