@@ -20,10 +20,8 @@ class DuelFragment : Fragment() {
         }
         val current = inflater.inflate(R.layout.fragment_duel_connected, container, false)
         current.findViewById<Button>(R.id.duel_connexion_button).setOnClickListener {
-            //val ip = current.findViewById<android.widget.EditText>(R.id.adresse_ip).text.toString()
-            //val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
-            val port = "8080"
-            val ip = "192.168.1.26"
+            val ip = current.findViewById<android.widget.EditText>(R.id.adresse_ip).text.toString()
+            val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
             if (ip == "" || port == "" || port.toIntOrNull() == null || ip.split(".").size != 4) {
                 Toast.makeText(requireContext(), "Entrez une adresse ip et un port valide", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
