@@ -30,6 +30,11 @@ open class GameClass {
         textSize = allTextSize
         setShadowLayer(5f, 5f, 5f, Color.BLACK)
     }
+    val paintScoreLittle = Paint().apply {
+        color = Color.GREEN
+        textSize = allTextSize / 2
+        setShadowLayer(5f, 5f, 5f, Color.BLACK)
+    }
     val rectPaint = Paint().apply {
         color = Color.CYAN
         strokeWidth = 5f

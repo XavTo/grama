@@ -21,12 +21,11 @@
             android:orientation="vertical">
             <TextView
                 style="@style/BigTextStyle"
-                android:id="@+id/wait_host_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:layout_marginTop="20dp"
-                android:text="@string/wait_connexion">
+                android:text="@string/wait_host">
             </TextView>
             <ProgressBar
                 android:layout_width="wrap_content"
@@ -34,20 +33,6 @@
                 android:layout_gravity="center"
                 android:indeterminate="true"
                 android:visibility="visible" />
-
-            <Button
-                android:id="@+id/button_cancel"
-                android:layout_width="129dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="@string/annuler" />
-            <Button
-                android:id="@+id/button_launch_game"
-                android:layout_width="129dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:visibility="invisible"
-                android:text="@string/lancer_la_partie" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>

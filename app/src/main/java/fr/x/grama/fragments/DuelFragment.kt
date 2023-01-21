@@ -1,5 +1,6 @@
 package fr.x.grama.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import fr.x.grama.NetworkClass
-import fr.x.grama.R
-import fr.x.grama.UserInfo
+import fr.x.grama.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class DuelFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -18,19 +20,31 @@ class DuelFragment : Fragment() {
         }
         val current = inflater.inflate(R.layout.fragment_duel_connected, container, false)
         current.findViewById<Button>(R.id.duel_connexion_button).setOnClickListener {
-            val ip = current.findViewById<android.widget.EditText>(R.id.adresse_ip).text.toString()
-            val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
+            //val ip = current.findViewById<android.widget.EditText>(R.id.adresse_ip).text.toString()
+            //val port = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
+            val port = "8080"
+            val ip = "192.168.1.26"
             if (ip == "" || port == "" || port.toIntOrNull() == null || ip.split(".").size != 4) {
                 Toast.makeText(requireContext(), "Entrez une adresse ip et un port valide", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val networkServ = NetworkClass()
-            Thread{ networkServ.connect(ip, port.toInt()) }.start()
+            CoroutineScope(Dispatchers.IO).launch {
+                NetworkClass.connect(ip, port.toInt(), requireContext())
+            }
+            Thread.sleep(500)
+            if (NetworkClass.isClientConnnected) {
+                val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
+                containerLoad.replace(this.id, WaitHost())
+                containerLoad.addToBackStack(null)
+                containerLoad.commit()
+            } else {
+                Toast.makeText(requireContext(), "Impossible de se connecter au serveur", Toast.LENGTH_SHORT).show()
+            }
+            return@setOnClickListener
         }
         current.findViewById<Button>(R.id.duel_host_button).setOnClickListener {
             val port: Int = current.findViewById<android.widget.EditText>(R.id.port).text.toString().toInt()
-            val networkServ = NetworkClass()
-            val ret = networkServ.checkPort(port)
+            val ret = NetworkClass.checkPort(port)
             if (ret == 1) {
                 Toast.makeText(requireContext(), "Permission refusée", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -39,12 +53,16 @@ class DuelFragment : Fragment() {
                 Toast.makeText(requireContext(), "Le port est déjà utilisé", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            Thread{ networkServ.start(port) }.start()
-            Thread{ networkServ.connect("localhost", port) }.start()
-            val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
-            containerLoad.replace(this.id, DuelWaitFragment())
-            containerLoad.addToBackStack(null)
-            containerLoad.commit()
+            CoroutineScope(Dispatchers.IO).launch {
+                NetworkClass.start(port)
+            }
+            NetworkClass.isHost = true
+            CoroutineScope(Dispatchers.IO).launch {
+                NetworkClass.connect("localhost", port, requireContext())
+            }
+            val intent = Intent(requireContext(), NetworkActivity::class.java)
+            startActivity(intent)
+
             return@setOnClickListener
         }
         return current

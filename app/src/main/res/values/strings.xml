@@ -30,5 +30,8 @@
     <string name="desc_duel">Duel</string>
     <string name="desc_cross">GoBack</string>
     <string name="background">background</string>
-    <string name="r_ponse">réponse</string>
+    <string name="réponse">réponse</string>
+    <string name="lancer_la_partie">lancer la partie</string>
+    <string name="wait_host">en attente de l\'hôte</string>
+    <string name="connected_clients">%d connecté(s)</string>
 </resources>

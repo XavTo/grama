@@ -5,8 +5,8 @@ import android.graphics.Rect
 import android.os.CountDownTimer
 
 class GameDef : GameClass() {
-    private var listWord: MutableList<String> = mutableListOf()
-    private var listDefinition: MutableList<String> = mutableListOf()
+    var listWord: MutableList<String> = mutableListOf()
+    var listDefinition: MutableList<String> = mutableListOf()
     var word = ""
     var definition = ""
     private var y: Float = super.screenHeight / 2f

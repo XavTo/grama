@@ -47,4 +47,5 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.sqlite:sqlite:2.3.0'
     implementation 'org.mindrot:jbcrypt:0.4'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0-alpha04'
 }

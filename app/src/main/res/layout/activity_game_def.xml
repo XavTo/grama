@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:autofillHints=""
-        android:hint="@string/r_ponse"
+        android:hint="@string/réponse"
         android:inputType="textNoSuggestions"
         android:visibility="visible"
         android:textSize="30sp"
