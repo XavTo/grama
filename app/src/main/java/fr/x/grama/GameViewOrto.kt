@@ -12,15 +12,14 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 
 class GameViewOrto : View {
     private var gameOrto: GameOrto? = null
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
-    private var gradientStartColor = Color.CYAN
-    private var gradientEndColor = Color.GREEN
-    private var newStartColor = Color.CYAN
-    private var newEndColor = Color.GREEN
+    private var newStartColor: Int = 0
+    private var newEndColor: Int = 0
     private var animator: ValueAnimator? = null
     private var pos = 0f
     private var tempRect = Rect()
@@ -54,13 +53,16 @@ class GameViewOrto : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         gameOrto?.let {
-            canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
-            canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - 280).toFloat(), 700f, it.paint)
+            canvas.drawText("Score: ${it.getScore()}", 0f, 230f, it.paintScore)
+            canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - it.allTextSize * 2),
+                it.screenHeight / 4.5f,
+                it.paint
+            )
             for (i in 0..2) {
                 canvas.save()
                 pos = animator?.animatedFraction ?: 0f
-                newStartColor = evaluateColor(gradientStartColor, gradientEndColor, pos)
-                newEndColor = evaluateColor(gradientEndColor, gradientStartColor, pos)
+                newStartColor = evaluateColor(it.gradientStartColor[i], it.gradientEndColor[i], pos)
+                newEndColor = evaluateColor(it.gradientEndColor[i], it.gradientStartColor[i], pos)
                 val shadowRect = RectF(it.rect[i])
                 it.rectPaint.shader = LinearGradient(
                     it.rect[i].left.toFloat(),
@@ -125,6 +127,11 @@ class GameViewOrto : View {
                             it.textArray[it.wordInd].word[i] = ""
                             it.updateScore(it.getScore() + 1, Color.GREEN, Color.CYAN)
                             performClick()
+                        } else if (it.rect[i].contains(event.x.toInt(), event.y.toInt()) && !it.textArray[it.wordInd].good[i]) {
+                            it.updateScore(it.getScore() - 1, Color.RED, Color.CYAN)
+                            it.gradientStartColor[i] = Color.MAGENTA
+                            it.gradientEndColor[i] = Color.RED
+                            performClick()
                         }
                     }
                 }
@@ -136,10 +143,16 @@ class GameViewOrto : View {
     fun update() {
         gameOrto?.update()
         if (gameOrto?.endGame == true) {
-            gameOrto?.let {
-                val bundle = Bundle()
-                bundle.putInt("score", it.getScore())
-            }
+            gameOrto = null
+            (parent as ViewGroup).removeView(this)
+            val intent = Intent(context, GameActivity::class.java)
+            intent.putExtra("score", gameOrto?.getScore())
+            intent.putExtra("gameType", 3)
+            context.startActivity(intent)
+            (context as Activity).finish()
+        }
+        if (gameOrto?.endTime == true) {
+            gameOrto?.correctAnswer()
         }
         invalidate()
     }

@@ -33,6 +33,7 @@ class GameDef : GameClass() {
         listDefinition.removeAt(0)
         if (listWord.size == 0) {
             endGame = true
+            return
         }
         word = listWord[0]
         definition = listDefinition[0]

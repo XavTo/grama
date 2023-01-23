@@ -27,6 +27,7 @@ class GameActivity : AppCompatActivity() {
                 setContentView(R.layout.activity_game_orto)
                 gameViewOrto = findViewById(R.id.gameViewOrto)
                 gameViewOrto?.setGameOrto(GameOrto())
+                println("GameActivity: onCreate: gameType = 0")
             }
             1 -> {
                 setContentView(R.layout.activity_game_def)

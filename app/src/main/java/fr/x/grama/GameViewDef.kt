@@ -109,10 +109,8 @@ class GameViewDef : View {
             return
         }
         if (gameDef?.endGame == true) {
-            val intent = Intent(context, GameActivity::class.java)
-            intent.putExtra("score", gameDef?.getScore())
-            intent.putExtra("gameType", "3")
-            context.startActivity(intent)
+            println("EndGame YOOO")
+            destroy()
         }
         if (textInBox != "" && textInBox.equals(gameDef?.word, true)) {
             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
@@ -161,11 +159,8 @@ class GameViewDef : View {
         } else if (ServerClass.networkRunning) {
             ServerClass.reset()
         }
-        println("GameViewDef : destroy")
         this.gameDef = null
-        val parentView = this.parent as ViewGroup
-        this.visibility = GONE
-        parentView.removeView(this)
+        (parent as ViewGroup).removeView(this)
         val intent = Intent(context, MainActivity::class.java)
         context.startActivity(intent)
         (context as Activity).finish()

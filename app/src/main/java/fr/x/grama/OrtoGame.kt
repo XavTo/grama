@@ -1,5 +1,6 @@
 package fr.x.grama
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.CountDownTimer
 
@@ -25,28 +26,41 @@ class GameOrto : GameClass() {
     val rect: Array<Rect> = arrayOf(Rect(), Rect(), Rect())
     var wordInd: Int = 0
     var textArray: MutableList<Word> = mutableListOf()
-    private var y: Array<Float> = arrayOf(super.screenHeight / 2f, super.screenHeight / 2f + 240, super.screenHeight / 2f + 480f)
+    var endTime: Boolean = false
+    var gradientStartColor:Array<Int> = arrayOf(Color.CYAN, Color.CYAN, Color.CYAN)
+    var gradientEndColor:Array<Int> = arrayOf(Color.GREEN, Color.GREEN, Color.GREEN)
+    private var y: Array<Float> = arrayOf(super.screenHeight / 2.2f , super.screenHeight / 2.2f + 500f, super.screenHeight / 2.2f + 1000f)
     private val timer = object : CountDownTimer(5000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
         }
         override fun onFinish() {
-            endGame = true
+            endTime = true
         }
     }.start()
 
 
     fun update() {
         for (i in 0..2) {
-            rect[i].set(screenWidth / 10, (y[i] - 165).toInt(), screenWidth - (screenWidth / 10), (y[i] + 20).toInt())
+            rect[i].set(screenWidth / 10, (y[i] - screenHeight / 9).toInt(), screenWidth - (screenWidth / 10), (y[i] + 80).toInt())
+        }
+        if (timeLeft <= 0f) {
+            endTime = true
         }
         if (textArray[wordInd].word[0] == "" || textArray[wordInd].word[1] == "" || textArray[wordInd].word[2] == "") {
-            textArray.removeAt(wordInd)
-            if (textArray.size == 0) {
-                endGame = true
-            }
-            timer.start()
+            correctAnswer()
         }
+    }
+
+    fun correctAnswer() {
+        textArray.removeAt(wordInd)
+        if (textArray.size == 0) {
+            endGame = true
+        }
+        endTime = false
+        gradientEndColor = arrayOf(Color.GREEN, Color.GREEN, Color.GREEN)
+        gradientStartColor = arrayOf(Color.CYAN, Color.CYAN, Color.CYAN)
+        timer.start()
     }
 
     fun getText(context: Context) : MutableList<Word> {
@@ -66,6 +80,11 @@ class GameOrto : GameClass() {
         }
         cursor.close()
         return textArray
+    }
+
+    fun destroy() {
+        // destroy the class
+
     }
 }
 

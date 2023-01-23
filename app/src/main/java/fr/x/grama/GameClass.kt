@@ -18,7 +18,7 @@ open class GameClass {
     val screenWidth = resources.displayMetrics.widthPixels
     val screenHeight = resources.displayMetrics.heightPixels
     val allTextSize = 140f / 1080f * screenWidth
-    var timeLeft: Float = 0f
+    var timeLeft: Float = 0.1f
 
     val paint = Paint().apply {
         color = Color.rgb(0, 150, 255)
