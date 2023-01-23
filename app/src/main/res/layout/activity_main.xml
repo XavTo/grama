@@ -47,6 +47,7 @@
         android:layout_height="80dp"
         android:background="@color/purple_200"
         app:itemIconSize="40dp"
+        app:itemIconTint="@color/light_grey"
         app:itemTextAppearanceActive="@style/BottomNavigationView.Active"
         app:itemTextAppearanceInactive="@style/BottomNavigationView"
         app:layout_constraintBottom_toBottomOf="parent"

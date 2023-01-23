@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class ButtonAdapter(private val listGame : List<GameModel>): RecyclerView.Adapte
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemName.text = listGame[position].name
         holder.itemName.setOnClickListener {
+            holder.itemName.startAnimation(AnimationUtils.loadAnimation(holder.itemName.context, R.anim.fade_in))
             val intent = Intent(holder.itemName.context, GameActivity::class.java)
             intent.putExtra("gameType", position)
             startActivity(it.context, intent, null)

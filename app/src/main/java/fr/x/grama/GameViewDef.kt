@@ -1,6 +1,8 @@
 package fr.x.grama
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.GradientDrawable
@@ -8,6 +10,7 @@ import android.text.*
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
@@ -17,22 +20,24 @@ import kotlinx.coroutines.launch
 
 
 class GameViewDef : View {
-    private var gameDef: GameDef? = null
+    var gameDef: GameDef? = null
+
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
     private var textInBox: String = ""
     private var editText: EditText? = null
     var path: Path = Path()
-    fun setGameDef(gameDef: GameDef, tempEditText: EditText) {
-        if (!NetworkClass.networkRunning || NetworkClass.isHost) {
-            gameDef.setText(this.context)
-            if (NetworkClass.networkRunning && NetworkClass.isHost) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    NetworkClass.sendGameInfo(gameDef.listWord, gameDef.listDefinition)
-                }
-            }
+    fun setGameDef(tempGameDef: GameDef, tempEditText: EditText) {
+        if (!NetworkClass.isClientConnnected) {
+            tempGameDef.setText(this.context)
+        } else {
+            tempGameDef.listDefinition = NetworkClass.getDefinition()
+            tempGameDef.listWord = NetworkClass.getWord()
+            tempGameDef.word = tempGameDef.listWord[0]
+            tempGameDef.definition = tempGameDef.listDefinition[0]
         }
-        this.gameDef = gameDef
+        this.gameDef = tempGameDef
+        println("GameViewDef : ${gameDef!!.listWord} - ${gameDef!!.listDefinition}")
         setEditText(tempEditText)
     }
 
@@ -47,7 +52,11 @@ class GameViewDef : View {
         editText?.background = shadow
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
-        editText?.setOnFocusChangeListener {_, hasFocus -> if (hasFocus) {editText?.hint = "" } }
+        editText?.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                editText?.hint = ""
+            }
+        }
         editText?.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {}
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -66,30 +75,44 @@ class GameViewDef : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         gameDef?.let {
-            if (NetworkClass.networkRunning) {
-                if (NetworkClass.scoreReceived) {
-                    var y = 180f
-                    for ((ind, name) in NetworkClass.getClientsNames().withIndex()) {
-                        canvas.drawText(name, 0f, y, it.paintScoreLittle)
-                        y += 90f
+            if (NetworkClass.isClientConnnected) {
+                val scoreEn = NetworkClass.getScore()
+                val yPos = 100f
+                for (score in scoreEn) {
+                    if (score.first == UserInfo.pseudo) {
+                        continue
                     }
+                    canvas.drawText(
+                        "${score.first} : ${score.second}",
+                        it.screenWidth / 1.5f,
+                        yPos,
+                        it.paintScoreLittle
+                    )
+                    yPos + 50f
                 }
-            } else {
-                canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
             }
-            canvas.drawText("Time: ${it.timeLeft}", (it.screenWidth / 2 - it.allTextSize * 2), it.screenHeight / 6f, it.paint)
+            canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
+            canvas.drawText(
+                "Time: ${it.timeLeft}",
+                (it.screenWidth / 2 - it.allTextSize * 2),
+                it.screenHeight / 6f,
+                it.paint
+            )
             drawTextRect(canvas, it.definition, it.rect)
         }
     }
 
     fun update() {
         gameDef?.update()
-        if (NetworkClass.networkRunning && NetworkClass.dataReceived && !NetworkClass.isHost) {
-            this.gameDef!!.listWord = NetworkClass.getWord()
-            this.gameDef!!.listDefinition = NetworkClass.getDefinition()
-            gameDef!!.word = gameDef!!.listWord[0]
-            gameDef!!.definition = gameDef!!.listDefinition[0]
-            NetworkClass.dataReceived = false
+        if (gameDef?.endTime == true) {
+            gameDef?.correctAnswer()
+            return
+        }
+        if (gameDef?.endGame == true) {
+            val intent = Intent(context, GameActivity::class.java)
+            intent.putExtra("score", gameDef?.getScore())
+            intent.putExtra("gameType", "3")
+            context.startActivity(intent)
         }
         if (textInBox != "" && textInBox.equals(gameDef?.word, true)) {
             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
@@ -97,12 +120,13 @@ class GameViewDef : View {
             gameDef!!.correctAnswer()
             editText?.setText("")
             textInBox = ""
-            if (NetworkClass.networkRunning) {
+            if (NetworkClass.isClientConnnected) {
                 CoroutineScope(Dispatchers.IO).launch {
                     NetworkClass.sendMessageToServ("#WordFound :${gameDef!!.word}")
+                    NetworkClass.sendMessageToServ("#Score :${gameDef!!.getScore()}")
                 }
             }
-        } else if (NetworkClass.networkRunning && NetworkClass.wordFound != "") {
+        } else if (NetworkClass.isClientConnnected && NetworkClass.wordFound != "") {
             Toast.makeText(context, "Le mot était ${gameDef!!.word}", Toast.LENGTH_SHORT).show()
             gameDef!!.correctAnswer()
             editText?.setText("")
@@ -127,5 +151,23 @@ class GameViewDef : View {
         canvas.translate(rect.left.toFloat(), rect.top.toFloat() - GameDef().screenHeight / 4f)
         staticLayout.draw(canvas)
         canvas.restore()
+    }
+
+    fun destroy() {
+        if (NetworkClass.isClientConnnected) {
+            CoroutineScope(Dispatchers.IO).launch {
+                NetworkClass.sendMessageToServ("#Leave")
+            }
+        } else if (ServerClass.networkRunning) {
+            ServerClass.reset()
+        }
+        println("GameViewDef : destroy")
+        this.gameDef = null
+        val parentView = this.parent as ViewGroup
+        this.visibility = GONE
+        parentView.removeView(this)
+        val intent = Intent(context, MainActivity::class.java)
+        context.startActivity(intent)
+        (context as Activity).finish()
     }
 }

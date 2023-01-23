@@ -1,13 +1,17 @@
 package fr.x.grama
 import android.animation.*
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 
 class GameViewOrto : View {
     private var gameOrto: GameOrto? = null
@@ -138,5 +142,23 @@ class GameViewOrto : View {
             }
         }
         invalidate()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val intent = Intent(context, MainActivity::class.java)
+            context.startActivity(intent)
+            (context as Activity).finish()
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    fun destroy() {
+        val parentView = this.parent as ViewGroup
+        this.visibility = GONE
+        parentView.removeView(this)
+        val intent = Intent(context, MainActivity::class.java)
+        context.startActivity(intent)
+        (context as Activity).finish()
     }
 }

@@ -9,6 +9,7 @@ class GameDef : GameClass() {
     var listDefinition: MutableList<String> = mutableListOf()
     var word = ""
     var definition = ""
+    var endTime: Boolean = false
     private var y: Float = super.screenHeight / 2f
     var rect: Rect = Rect(50, 50, 200, 150)
     private val timer = object : CountDownTimer(15000, 100) {
@@ -16,23 +17,27 @@ class GameDef : GameClass() {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
         }
         override fun onFinish() {
-            endGame = true
+            endTime = true
         }
     }.start()
 
     fun update() {
         rect.set(screenWidth / 10, (y - 140).toInt(), screenWidth - (screenWidth / 10), (y + 20).toInt())
         if (timeLeft <= 0f) {
-            endGame = true
+            endTime = true
         }
     }
 
     fun correctAnswer() {
         listWord.removeAt(0)
         listDefinition.removeAt(0)
+        if (listWord.size == 0) {
+            endGame = true
+        }
         word = listWord[0]
         definition = listDefinition[0]
         timer.start()
+        endTime = false
     }
 
     fun setText(context: Context) {

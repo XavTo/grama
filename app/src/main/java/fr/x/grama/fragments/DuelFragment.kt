@@ -41,8 +41,13 @@ class DuelFragment : Fragment() {
             return@setOnClickListener
         }
         current.findViewById<Button>(R.id.duel_host_button).setOnClickListener {
-            val port: Int = current.findViewById<android.widget.EditText>(R.id.port).text.toString().toInt()
-            val ret = NetworkClass.checkPort(port)
+            val stringPort = current.findViewById<android.widget.EditText>(R.id.port).text.toString()
+            val port: Int = if (stringPort == "" || stringPort.toIntOrNull() == null) {
+                8080
+            } else {
+                stringPort.toInt()
+            }
+            val ret = ServerClass.checkPort(port)
             if (ret == 1) {
                 Toast.makeText(requireContext(), "Permission refusée", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -52,9 +57,8 @@ class DuelFragment : Fragment() {
                 return@setOnClickListener
             }
             CoroutineScope(Dispatchers.IO).launch {
-                NetworkClass.start(port)
+                ServerClass.start(port)
             }
-            NetworkClass.isHost = true
             CoroutineScope(Dispatchers.IO).launch {
                 NetworkClass.connect("localhost", port, requireContext())
             }

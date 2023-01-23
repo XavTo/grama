@@ -5,22 +5,35 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 
 class NetworkActivity  : AppCompatActivity() {
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (ServerClass.networkRunning) {
+                ServerClass.reset()
+            }
+            val intent = Intent(this@NetworkActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_duel_wait_connexion)
         launchGame()
         checkButtonLaunchGame()
         checkButtonStopHost()
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
     private fun checkButtonStopHost() {
         findViewById<Button>(R.id.button_cancel).setOnClickListener {
-            NetworkClass.reset()
+            if (ServerClass.networkRunning) {
+                ServerClass.reset()
+            }
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
@@ -30,15 +43,21 @@ class NetworkActivity  : AppCompatActivity() {
 
     private fun checkButtonLaunchGame() {
         findViewById<Button>(R.id.button_launch_game).setOnClickListener {
+            val pairData = ServerClass.loadDataForGame(this)
             CoroutineScope(Dispatchers.IO).launch {
-                NetworkClass.sendMessage("start")
-                NetworkClass.sendNames()
+                ServerClass.sendNames()
+                ServerClass.sendGameInfo(pairData.first, pairData.second)
             }
-            NetworkClass.gameStarted = true
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("gameType", 1)
-            startActivity(intent)
-            finish()
+            findViewById<Button>(R.id.button_launch_game).visibility = View.GONE
+            findViewById<Button>(R.id.button_cancel).visibility = View.GONE
+            findViewById<TextView>(R.id.wait_host_text).text = "Lancement de la partie..."
+            ServerClass.waitForStart = true
+            CoroutineScope(Dispatchers.IO).launch {
+                while (!ServerClass.isGameLaunched()) {
+                    delay(100)
+                }
+            }
+            return@setOnClickListener
         }
     }
 
@@ -47,11 +66,13 @@ class NetworkActivity  : AppCompatActivity() {
         val textWaitHost = findViewById<TextView>(R.id.wait_host_text)
         launchGameButton.visibility = View.INVISIBLE
         CoroutineScope(Dispatchers.IO).launch {
-            while (!NetworkClass.gameStarted) {
-                val clients = NetworkClass.getNumberOfClients()
+            while (!ServerClass.waitForStart) {
+                val clients = ServerClass.getNumberOfClients()
                 if (clients > 0) {
-                    launchGameButton.visibility = View.VISIBLE
-                    textWaitHost.text = resources.getString(R.string.connected_clients, clients)
+                    withContext(Dispatchers.Main) {
+                        launchGameButton.visibility = View.VISIBLE
+                        textWaitHost.text = resources.getString(R.string.connected_clients, clients)
+                    }
                     delay(100)
                 } else {
                     delay(1000)
