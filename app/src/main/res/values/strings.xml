@@ -5,6 +5,7 @@
     <string name="home_page_game_2">Définitions</string>
     <string name="home_page_game_3">Grammaire</string>
     <!-- String Profile -->
+    <string name="notification">Notifications</string>
     <string name="connexion">Connexion</string>
     <string name="duel">Duel</string>
     <string name="deconnexion">Deconnexion</string>
@@ -34,4 +35,16 @@
     <string name="lancer_la_partie">lancer la partie</string>
     <string name="wait_host">en attente de l\'hôte</string>
     <string name="connected_clients">%d connecté(s)</string>
+    <string name="notifications">Notifications</string>
+    <string name="sound">son</string>
+    <string name="language">langage</string>
+    <string name="english">english</string>
+    <string name="french">français</string>
+    <string name="spanish">spanish</string>
+    <string name="display">display</string>
+    <string name="statistics">Statistiques</string>
+    <string name="reset">Reset</string>
+    <string name="total_wins">Total Wins: %d</string>
+    <string name="total_losses">Total Losses: %d</string>
+    <string name="win_percentage">Win Percentage: %.0f%%</string>
 </resources>

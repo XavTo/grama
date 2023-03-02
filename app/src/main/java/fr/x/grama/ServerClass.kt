@@ -31,7 +31,6 @@ object ServerClass {
             var client: Socket
             while (networkRunning) {
                 println(clients.size)
-                println("server waiting for client")
                 try {
                     client = server.accept()
                 } catch (e: SocketException) {
@@ -104,6 +103,8 @@ object ServerClass {
         }
         clients.clear()
         networkRunning = false
+        waitForStart = false
+        gameStarted = false
     }
 
     private suspend fun sendMessageSkipSender(s: String) {

@@ -42,10 +42,6 @@ class GameActivity : AppCompatActivity() {
                 gameViewDef?.setGameDef(GameDef(), editText)
             }
             2 -> {
-                intent = Intent(this, SettingsActivity::class.java)
-                intent.putExtra("id", 1)
-                intent.putExtra("tag", "setting")
-                startActivity(intent)
                 finish()
             }
             else -> {

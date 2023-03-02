@@ -25,13 +25,21 @@ class GameDef : GameClass() {
         rect.set(screenWidth / 10, (y - 140).toInt(), screenWidth - (screenWidth / 10), (y + 20).toInt())
         if (timeLeft <= 0f) {
             endTime = true
+            if (listWord.size == 0) {
+                endGame = true
+                return
+            }
         }
     }
 
     fun correctAnswer() {
+        if (listWord.size < 1) {
+            endGame = true
+            return
+        }
         listWord.removeAt(0)
         listDefinition.removeAt(0)
-        if (listWord.size == 0) {
+        if (listWord.size < 1) {
             endGame = true
             return
         }
@@ -57,6 +65,10 @@ class GameDef : GameClass() {
         val shuffledList = tempWord.zip(tempDef).shuffled()
         listWord = shuffledList.map { it.first }.toMutableList()
         listDefinition = shuffledList.map { it.second }.toMutableList()
+        if (listWord.size > 10) {
+            listWord = listWord.subList(0, 10)
+            listDefinition = listDefinition.subList(0, 10)
+        }
         word = listWord[0]
         definition = listDefinition[0]
     }

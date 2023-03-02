@@ -33,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         }
         UserInfo.email = UserInfo.sp?.getString("Unm", "").toString()
         UserInfo.pseudo = UserInfo.sp?.getString("Psw", "").toString()
+        UserInfo.wins = UserInfo.sp?.getInt("Wins", 0)!!
+        UserInfo.losses = UserInfo.sp?.getInt("Losses", 0)!!
     }
 
     private fun fillDbIfEmpty(db: SQLiteDatabase) {

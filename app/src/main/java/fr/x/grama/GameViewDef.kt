@@ -104,13 +104,35 @@ class GameViewDef : View {
 
     fun update() {
         gameDef?.update()
+        if (gameDef?.endGame == true) {
+            if (NetworkClass.isClientConnnected) {
+                val ed = UserInfo.sp?.edit()
+                val scoreEn = NetworkClass.getScore()
+                var winner = ""
+                var maxScore = 0
+                for (score in scoreEn) {
+                    if (score.second > maxScore) {
+                        winner = score.first
+                        maxScore = score.second
+                    }
+                }
+                Toast.makeText(context, "Winner is $winner", Toast.LENGTH_LONG).show()
+                if (winner == UserInfo.pseudo) {
+                    UserInfo.wins++
+                    ed?.putInt("Wins", UserInfo.wins)
+                } else {
+                    UserInfo.losses++
+                    ed?.putInt("Loses", UserInfo.losses)
+                }
+                ed?.apply()
+            } else {
+                Toast.makeText(context, "Winner is ${UserInfo.pseudo}", Toast.LENGTH_LONG).show()
+            }
+            destroy()
+        }
         if (gameDef?.endTime == true) {
             gameDef?.correctAnswer()
             return
-        }
-        if (gameDef?.endGame == true) {
-            println("EndGame YOOO")
-            destroy()
         }
         if (textInBox != "" && textInBox.equals(gameDef?.word, true)) {
             Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
@@ -152,12 +174,13 @@ class GameViewDef : View {
     }
 
     fun destroy() {
+        if (ServerClass.networkRunning) {
+            ServerClass.reset()
+        }
         if (NetworkClass.isClientConnnected) {
             CoroutineScope(Dispatchers.IO).launch {
                 NetworkClass.sendMessageToServ("#Leave")
             }
-        } else if (ServerClass.networkRunning) {
-            ServerClass.reset()
         }
         this.gameDef = null
         (parent as ViewGroup).removeView(this)

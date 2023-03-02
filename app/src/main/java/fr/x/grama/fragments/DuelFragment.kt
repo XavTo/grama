@@ -64,7 +64,6 @@ class DuelFragment : Fragment() {
             }
             val intent = Intent(requireContext(), NetworkActivity::class.java)
             startActivity(intent)
-
             return@setOnClickListener
         }
         return current
