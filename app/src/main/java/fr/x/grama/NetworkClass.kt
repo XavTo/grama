@@ -51,10 +51,12 @@ object NetworkClass {
                 wordFound = message.split(":")[1]
             }
             if (message.startsWith("#words :")) {
+                listWord.clear()
                 val words = message.split(":")[1].split("|")
                 listWord.addAll(words)
             }
             if (message.startsWith("#definitions :")) {
+                listDefinition.clear()
                 val definitions = message.split(":")[1].split("|")
                 listDefinition.addAll(definitions)
                 CoroutineScope(Dispatchers.IO).launch {

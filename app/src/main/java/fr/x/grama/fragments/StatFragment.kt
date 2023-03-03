@@ -23,7 +23,7 @@ class StatFragment : Fragment() {
             current.findViewById<android.widget.TextView>(R.id.win_percent).text = getString(R.string.win_percentage, (UserInfo.wins.toFloat() / (UserInfo.wins + UserInfo.losses) * 100))
             return@setOnClickListener
         }
-        current.findViewById<android.widget.TextView>(R.id.wins).text = getString(R.string.total_losses, UserInfo.losses)
+        current.findViewById<android.widget.TextView>(R.id.wins).text = getString(R.string.total_wins, UserInfo.wins)
         current.findViewById<android.widget.TextView>(R.id.losses).text = getString(R.string.total_losses, UserInfo.losses)
         current.findViewById<android.widget.TextView>(R.id.win_percent).text = getString(R.string.win_percentage, (UserInfo.wins.toFloat() / (UserInfo.wins + UserInfo.losses) * 100))
         return current

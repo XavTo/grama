@@ -12,6 +12,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
@@ -20,14 +21,15 @@ import kotlinx.coroutines.launch
 
 
 class GameViewDef : View {
-    var gameDef: GameDef? = null
+    private var gameDef: GameDef? = null
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?) : super(context)
     private var textInBox: String = ""
     private var editText: EditText? = null
+    private var deleteButton: Button? = null
     var path: Path = Path()
-    fun setGameDef(tempGameDef: GameDef, tempEditText: EditText) {
+    fun setGameDef(tempGameDef: GameDef, tempEditText: EditText, tempDeleteButton: Button) {
         if (!NetworkClass.isClientConnnected) {
             tempGameDef.setText(this.context)
         } else {
@@ -39,6 +41,17 @@ class GameViewDef : View {
         this.gameDef = tempGameDef
         println("GameViewDef : ${gameDef!!.listWord} - ${gameDef!!.listDefinition}")
         setEditText(tempEditText)
+        setDeleteButton(tempDeleteButton)
+    }
+
+    private fun setDeleteButton(tempDeleteButton: Button) {
+        deleteButton = tempDeleteButton
+        deleteButton?.setOnClickListener {
+            if (textInBox.isNotEmpty()) {
+                textInBox = ""
+                editText?.setText(textInBox)
+            }
+        }
     }
 
     private fun setEditText(tempEditText: EditText) {
@@ -125,10 +138,11 @@ class GameViewDef : View {
                     ed?.putInt("Loses", UserInfo.losses)
                 }
                 ed?.apply()
+                destroy(winner, maxScore)
             } else {
                 Toast.makeText(context, "Winner is ${UserInfo.pseudo}", Toast.LENGTH_LONG).show()
+                destroy(UserInfo.pseudo, gameDef!!.getScore())
             }
-            destroy()
         }
         if (gameDef?.endTime == true) {
             gameDef?.correctAnswer()
@@ -169,22 +183,20 @@ class GameViewDef : View {
             .build()
         canvas.save()
         canvas.translate(rect.left.toFloat(), rect.top.toFloat() - GameDef().screenHeight / 4f)
+        canvas.drawRect(-10f, -10f, textWidth.toFloat() + 10,
+            staticLayout.height.toFloat() + 10, gameDef?.rectPaint3!!)
         staticLayout.draw(canvas)
         canvas.restore()
     }
 
-    fun destroy() {
-        if (ServerClass.networkRunning) {
-            ServerClass.reset()
-        }
-        if (NetworkClass.isClientConnnected) {
-            CoroutineScope(Dispatchers.IO).launch {
-                NetworkClass.sendMessageToServ("#Leave")
-            }
-        }
-        this.gameDef = null
+    fun destroy(winner: String = "", score : Int = 0) {
         (parent as ViewGroup).removeView(this)
-        val intent = Intent(context, MainActivity::class.java)
+        val intent = Intent(context, GameActivity::class.java)
+        intent.putExtra("score", score)
+        intent.putExtra("winner", winner)
+        intent.putExtra("gameType", 3)
+        intent.putExtra("currentGame", 1)
+        this.gameDef = null
         context.startActivity(intent)
         (context as Activity).finish()
     }

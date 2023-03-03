@@ -13,7 +13,7 @@ open class GameClass {
             resources = context.resources
         }
     }
-    var sco: Int = 0
+    private var sco: Int = 0
     var endGame: Boolean = false
     val screenWidth = resources.displayMetrics.widthPixels
     val screenHeight = resources.displayMetrics.heightPixels
@@ -47,6 +47,13 @@ open class GameClass {
         style = Paint.Style.FILL
         setShadowLayer(20f, 20f, 20f, Color.BLACK)
     }
+    val rectPaint3 = Paint().apply {
+        color = Color.parseColor("#B3E5FC")
+        strokeWidth = 5f
+        style = Paint.Style.FILL
+        setShadowLayer(12f, 12f, 12f, Color.BLACK)
+    }
+
 
     fun getScore(): Int {
         return sco

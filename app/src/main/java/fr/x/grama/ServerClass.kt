@@ -19,11 +19,6 @@ object ServerClass {
     private val clients = ConcurrentLinkedQueue<Client>()
     private var gameStarted: Boolean = false
 
-    fun stop() {
-        networkRunning = false
-        server.close()
-    }
-
     suspend fun start(port: Int) {
         withContext(Dispatchers.IO) {
             server = ServerSocket(port)
@@ -73,6 +68,13 @@ object ServerClass {
                     clients.elementAt(index).score = message.split(":")[1].split("|")[0].toInt()
                     sendScore()
                 }
+                if (message.startsWith("#playAgain :")) {
+                    clients.elementAt(index).ready = message.substring(12) == "true"
+                    if (clients.elementAt(index).ready) {
+                        clients.elementAt(index).score = 0
+                        sendScore()
+                    }
+                }
             }
         }
     }
@@ -103,6 +105,11 @@ object ServerClass {
         }
         clients.clear()
         networkRunning = false
+        waitForStart = false
+        gameStarted = false
+    }
+
+    fun resetGame() {
         waitForStart = false
         gameStarted = false
     }
@@ -204,9 +211,12 @@ fun loadDataForGame(context: Context): Pair<MutableList<String>, MutableList<Str
                 tempWord.add(cursor.getString(2))
             } while (cursor.moveToNext())
         }
+
         cursor.close()
         db.close()
         val shuffledList = tempWord.zip(tempDef).shuffled()
+        if (shuffledList.size > 10)
+            return Pair(shuffledList.subList(0, 10).map { it.first }.toMutableList(), shuffledList.subList(0, 10).map { it.second }.toMutableList())
         return Pair(shuffledList.map { it.first }.toMutableList(), shuffledList.map { it.second }.toMutableList())
     }
 }

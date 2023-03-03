@@ -64,7 +64,7 @@ class GameOrto : GameClass() {
     }
 
     fun getText(context: Context) : MutableList<Word> {
-        val textArray = mutableListOf<Word>()
+        var textArray = mutableListOf<Word>()
         val db = DatabaseManager(context).readableDatabase
 
         val cursor = db.rawQuery("SELECT * FROM ${DatabaseManager.TABLE_WORD}", null)
@@ -78,13 +78,11 @@ class GameOrto : GameClass() {
                 textArray.add(Word(wordShuffled, goodShuffled))
             } while (cursor.moveToNext())
         }
+        if (textArray.size > 10) {
+            textArray = textArray.subList(0, 10)
+        }
         cursor.close()
         return textArray
-    }
-
-    fun destroy() {
-        // destroy the class
-
     }
 }
 

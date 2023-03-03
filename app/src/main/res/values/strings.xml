@@ -47,4 +47,11 @@
     <string name="total_wins">Total Wins: %d</string>
     <string name="total_losses">Total Losses: %d</string>
     <string name="win_percentage">Win Percentage: %.0f%%</string>
+    <string name="effacer">Effacer</string>
+    <string name="about">About</string>
+    <string name="aboutInfo">This app was created by Xavier Tonnellier</string>
+    <string name="version">Version 1.0.0</string>
+    <string name="leaveGame">Return</string>
+    <string name="winner">Winner is %s with %d points</string>
+    <string name="play_again">Play Again</string>
 </resources>

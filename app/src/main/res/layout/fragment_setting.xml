@@ -11,13 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:text="@string/notification"
-        style="@style/DefaultTextStyle"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/notifications_switch"
@@ -27,10 +21,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <TextView
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sound_switch"
         android:text="@string/sound"
         style="@style/DefaultTextStyle"
-        android:textStyle="bold"
+        android:checked="true"
         android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -79,24 +74,32 @@
             android:textSize="16sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </RadioGroup>
 
     <TextView
-        android:text="@string/pseudo"
         style="@style/DefaultTextStyle"
-        android:textStyle="bold"
-        android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="50dp"
+        android:paddingBottom="16dp"
+        android:text="@string/about"
+        android:textStyle="bold" />
 
-    <CheckBox
-        android:id="@+id/display_checkbox"
-        android:text="@string/display"
+    <TextView
+        android:text="@string/aboutInfo"
         style="@style/DefaultTextStyle"
         android:padding="16dp"
-        android:checked="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
+
+    <TextView
+        style="@style/DefaultTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/version" />
 
 </LinearLayout>

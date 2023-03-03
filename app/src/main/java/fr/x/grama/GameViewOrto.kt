@@ -6,13 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
-import android.os.Bundle
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorInt
 
 class GameViewOrto : View {
     private var gameOrto: GameOrto? = null
@@ -143,11 +141,13 @@ class GameViewOrto : View {
     fun update() {
         gameOrto?.update()
         if (gameOrto?.endGame == true) {
-            gameOrto = null
             (parent as ViewGroup).removeView(this)
             val intent = Intent(context, GameActivity::class.java)
             intent.putExtra("score", gameOrto?.getScore())
+            intent.putExtra("winner", UserInfo.pseudo)
             intent.putExtra("gameType", 3)
+            intent.putExtra("currentGame", 0)
+            gameOrto = null
             context.startActivity(intent)
             (context as Activity).finish()
         }
