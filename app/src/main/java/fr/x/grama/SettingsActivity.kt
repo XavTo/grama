@@ -19,8 +19,9 @@ class SettingsActivity : AppCompatActivity() {
             finish()
         }
     }
-
+    private lateinit var gramaClass: GramaClass
     override fun onCreate(savedInstanceState: Bundle?) {
+        gramaClass = applicationContext as GramaClass
         val extra = intent.extras
         val id = extra!!.getInt("id")
         val tagFragment = extra.getString("tag")
@@ -56,5 +57,15 @@ class SettingsActivity : AppCompatActivity() {
         containerLoad.replace(R.id.setting_box, fragment)
         containerLoad.addToBackStack(null)
         containerLoad.commit()
+    }
+
+    override fun onResume() {
+        gramaClass.startMusic()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        gramaClass.stopMusic()
     }
 }

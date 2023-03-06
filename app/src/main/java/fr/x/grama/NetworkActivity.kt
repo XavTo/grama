@@ -7,11 +7,18 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import fr.x.grama.fragments.WaitHost
 import kotlinx.coroutines.*
 
 class NetworkActivity  : AppCompatActivity() {
+    private lateinit var gramaClass: GramaClass
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
+            if (NetworkClass.isClientConnnected) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    NetworkClass.sendMessageToServ("#disconnect")
+                }
+            }
             if (ServerClass.networkRunning) {
                 ServerClass.reset()
             }
@@ -22,6 +29,11 @@ class NetworkActivity  : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gramaClass = applicationContext as GramaClass
+        if (!intent.getBooleanExtra("isHost", true)) {
+            setContentView(R.layout.fragment_wait_host)
+            return
+        }
         setContentView(R.layout.fragment_duel_wait_connexion)
         launchGame()
         checkButtonLaunchGame()
@@ -78,6 +90,24 @@ class NetworkActivity  : AppCompatActivity() {
                     delay(1000)
                 }
             }
+            withContext(Dispatchers.Main) {
+                launchGameButton.visibility = View.GONE
+            }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gramaClass.startMusic()
+    }
+
+    override fun onPause() {
+        gramaClass.stopMusic()
+        if (NetworkClass.isClientConnnected && !NetworkClass.inGame) {
+            CoroutineScope(Dispatchers.IO).launch {
+                NetworkClass.sendMessageToServ("#disconnect")
+            }
+        }
+        super.onPause()
     }
 }

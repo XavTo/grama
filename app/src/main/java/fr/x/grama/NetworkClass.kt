@@ -13,6 +13,7 @@ object NetworkClass {
 
     var wordFound: String = ""
     var isClientConnnected: Boolean = false
+    var inGame = false
     private var listWord: ArrayList<String> = ArrayList()
     private var listDefinition: ArrayList<String> = ArrayList()
     private var uniqueClient: Client? = null
@@ -38,6 +39,7 @@ object NetworkClass {
         while (isClientConnnected) {
             val message = input.readLine()
             if (message == "#end" || message == null) {
+                inGame = false
                 disconnect()
                 return
             }
@@ -76,6 +78,7 @@ object NetworkClass {
                 }
             }
             if (message == "#start") {
+                inGame = true
                 val intent = Intent(context, GameActivity::class.java)
                 intent.putExtra("gameType", 1)
                 context.startActivity(intent)
@@ -106,6 +109,8 @@ object NetworkClass {
         uniqueClient?.socket?.close()
         uniqueClient?.reader?.close()
         uniqueClient?.writer?.close()
+        infoClients.clear()
         isClientConnnected = false
+        inGame = false
     }
 }

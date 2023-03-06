@@ -29,7 +29,7 @@ class GameOrto : GameClass() {
     var endTime: Boolean = false
     var gradientStartColor:Array<Int> = arrayOf(Color.CYAN, Color.CYAN, Color.CYAN)
     var gradientEndColor:Array<Int> = arrayOf(Color.GREEN, Color.GREEN, Color.GREEN)
-    private var y: Array<Float> = arrayOf(super.screenHeight / 2.2f , super.screenHeight / 2.2f + 500f, super.screenHeight / 2.2f + 1000f)
+    private var y: Array<Float> = arrayOf(super.screenHeight / 2.6f , super.screenHeight / 2.6f + super.screenWidth / 2.6f, super.screenHeight / 2.6f + super.screenWidth / 1.3f)
     private val timer = object : CountDownTimer(5000, 100) {
         override fun onTick(millisUntilFinished: Long) {
             timeLeft = (millisUntilFinished / 1000f).toString().substring(0, 3).toFloat()
@@ -42,7 +42,7 @@ class GameOrto : GameClass() {
 
     fun update() {
         for (i in 0..2) {
-            rect[i].set(screenWidth / 10, (y[i] - screenHeight / 9).toInt(), screenWidth - (screenWidth / 10), (y[i] + 80).toInt())
+            rect[i].set(screenWidth / 10, (y[i] - screenHeight / 11).toInt(), screenWidth - (screenWidth / 10), (y[i] + 80).toInt())
         }
         if (timeLeft <= 0f) {
             endTime = true

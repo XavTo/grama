@@ -3,9 +3,9 @@ package fr.x.grama
 import android.content.Intent
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.ImageView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,16 +15,23 @@ import fr.x.grama.fragments.StatFragment
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var gramaClass: GramaClass
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            return
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gramaClass = applicationContext as GramaClass
         setContentView(R.layout.activity_main)
         val tag = intent.extras?.getString("tag")
         setupFragment(tag.toString())
         setupNavigation()
         setupSetting()
         setupProf()
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         val db = DatabaseManager(this).writableDatabase
-        // drop table
         db.execSQL("DROP TABLE IF EXISTS TABLE_DEF")
         db.execSQL("DROP TABLE IF EXISTS TABLE_WORD")
         db.execSQL("CREATE TABLE IF NOT EXISTS TABLE_USER (id INTEGER PRIMARY KEY AUTOINCREMENT, EMAIL TEXT, USERNAME TEXT, PASSWORD TEXT)")
@@ -167,5 +174,15 @@ class MainActivity : AppCompatActivity() {
         containerLoad.replace(R.id.game_box, fragment, tag)
         containerLoad.addToBackStack(null)
         containerLoad.commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gramaClass.startMusic()
+    }
+
+    override fun onPause() {
+        gramaClass.stopMusic()
+        super.onPause()
     }
 }

@@ -30,6 +30,7 @@ object ServerClass {
                     client = server.accept()
                 } catch (e: SocketException) {
                     println("Server socket closed")
+                    reset()
                     return@withContext
                 }
                 clients.add(Client(client, BufferedReader(
@@ -53,6 +54,18 @@ object ServerClass {
                     return@launch
                 } catch (e: Exception) {
                     println("Client disconnected")
+                    return@launch
+                }
+                if (message.startsWith("#disconnect")) {
+                    try {
+                        println("Client disconnected")
+                        if (index < clients.size && clients.elementAt(index).socket.isConnected) {
+                            clients.elementAt(index).socket.close()
+                            clients.remove(clients.elementAt(index))
+                        }
+                    } catch (e: Exception) {
+                        println("Client already disconnected")
+                    }
                     return@launch
                 }
                 if (message.startsWith("#name :")) {
@@ -94,6 +107,7 @@ object ServerClass {
     }
 
     fun reset() {
+        println("Reset")
         server.close()
         clients.forEach { client ->
             CoroutineScope(Dispatchers.IO).launch {

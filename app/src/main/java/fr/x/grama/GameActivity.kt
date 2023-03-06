@@ -21,8 +21,10 @@ class GameActivity : AppCompatActivity() {
     private var gameViewOrto: GameViewOrto? = null
     private var gameViewDef: GameViewDef? = null
     private var endGame: Boolean = false
+    private lateinit var gramaClass: GramaClass
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        gramaClass = applicationContext as GramaClass
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         val gameType = intent.extras!!.getInt("gameType")
         GameClass.init(this)
@@ -51,7 +53,15 @@ class GameActivity : AppCompatActivity() {
             else -> {
                 setContentView(R.layout.fragment_win_game)
                 val textView = findViewById<View>(R.id.victory_message) as android.widget.TextView
-                textView.text = getString(R.string.winner, intent.extras!!.getString("winner"), intent.extras!!.getInt("score"))
+                val yourScore = findViewById<View>(R.id.your_score) as android.widget.TextView
+                val winner = intent.extras!!.getString("winner")
+                textView.text = getString(R.string.winner, winner, intent.extras!!.getInt("score"))
+                if (NetworkClass.isClientConnnected && winner != UserInfo.pseudo) {
+                    yourScore.text = getString(R.string.your_score, intent.extras!!.getInt("yourScore"))
+                    yourScore.visibility = View.VISIBLE
+                } else {
+                    yourScore.visibility = View.GONE
+                }
                 findViewById<Button>(R.id.return_button).setOnClickListener {
                     if (NetworkClass.isClientConnnected) {
                         CoroutineScope(Dispatchers.IO).launch {
@@ -65,32 +75,13 @@ class GameActivity : AppCompatActivity() {
                     startActivity(newIntent)
                     finish()
                 }
-                findViewById<Button>(R.id.play_again_button).setOnClickListener {
-                    if (ServerClass.networkRunning) {
-                        ServerClass.resetGame()
-                    }
-                    if (ServerClass.networkRunning) {
-                        val newIntent = Intent(this, NetworkActivity::class.java)
-                        startActivity(newIntent)
-                        finish()
-                        return@setOnClickListener
-                    }
-                    if (NetworkClass.isClientConnnected) {
-                        setContentView(R.layout.fragment_wait_host)
-                        return@setOnClickListener
-                    }
-                    val currentGame =  intent.extras!!.getInt("currentGame")
-                    val newIntent = Intent(this, GameActivity::class.java)
-                    newIntent.putExtra("gameType", currentGame)
-                    startActivity(newIntent)
-                    finish()
-                }
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
+        gramaClass.startMusic()
         Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallback {
             override fun doFrame(frameTimeNanos: Long) {
                 if (endGame) {
@@ -123,14 +114,28 @@ class GameActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        gramaClass.stopMusic()
+        if (gameViewOrto != null) {
+            gameViewOrto?.destroy()
+        } else if (gameViewDef != null) {
+            gameViewDef?.destroy()
+        }
         Choreographer.getInstance().removeFrameCallback {}
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            gameViewDef?.destroy()
-            gameViewOrto?.destroy()
+            if (NetworkClass.isClientConnnected) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    NetworkClass.sendMessageToServ("#disconnect")
+                }
+            }
+            gameViewDef = null
+            gameViewOrto = null
             endGame = true
+            val intent = Intent(this@GameActivity, MainActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

@@ -31,10 +31,9 @@ class DuelFragment : Fragment() {
             }
             Thread.sleep(500)
             if (NetworkClass.isClientConnnected) {
-                val containerLoad = requireActivity().supportFragmentManager.beginTransaction()
-                containerLoad.replace(this.id, WaitHost())
-                containerLoad.addToBackStack(null)
-                containerLoad.commit()
+                val intent = Intent(requireContext(), NetworkActivity::class.java)
+                intent.putExtra("isHost", false)
+                startActivity(intent)
             } else {
                 Toast.makeText(requireContext(), "Impossible de se connecter au serveur", Toast.LENGTH_SHORT).show()
             }

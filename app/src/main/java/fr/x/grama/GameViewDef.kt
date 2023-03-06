@@ -90,18 +90,17 @@ class GameViewDef : View {
         gameDef?.let {
             if (NetworkClass.isClientConnnected) {
                 val scoreEn = NetworkClass.getScore()
-                val yPos = 100f
+                var yPos = 70f
                 for (score in scoreEn) {
-                    if (score.first == UserInfo.pseudo) {
+                    if (score.first == UserInfo.pseudo)
                         continue
-                    }
                     canvas.drawText(
                         "${score.first} : ${score.second}",
-                        it.screenWidth / 1.5f,
+                        it.screenWidth / 1.6f,
                         yPos,
                         it.paintScoreLittle
                     )
-                    yPos + 50f
+                    yPos += 70f
                 }
             }
             canvas.drawText("Score: ${it.getScore()}", 0f, 180f, it.paintScore)
@@ -135,10 +134,10 @@ class GameViewDef : View {
                     ed?.putInt("Wins", UserInfo.wins)
                 } else {
                     UserInfo.losses++
-                    ed?.putInt("Loses", UserInfo.losses)
+                    ed?.putInt("Losses", UserInfo.losses)
                 }
                 ed?.apply()
-                destroy(winner, maxScore)
+                destroy(winner, maxScore, gameDef!!.getScore())
             } else {
                 Toast.makeText(context, "Winner is ${UserInfo.pseudo}", Toast.LENGTH_LONG).show()
                 destroy(UserInfo.pseudo, gameDef!!.getScore())
@@ -161,7 +160,10 @@ class GameViewDef : View {
                 }
             }
         } else if (NetworkClass.isClientConnnected && NetworkClass.wordFound != "") {
-            Toast.makeText(context, "Le mot était ${gameDef!!.word}", Toast.LENGTH_SHORT).show()
+            if (gameDef == null)
+                return
+            if (gameDef?.word != "")
+                Toast.makeText(context, "Le mot était ${gameDef!!.word}", Toast.LENGTH_SHORT).show()
             gameDef!!.correctAnswer()
             editText?.setText("")
             textInBox = ""
@@ -189,10 +191,11 @@ class GameViewDef : View {
         canvas.restore()
     }
 
-    fun destroy(winner: String = "", score : Int = 0) {
+    fun destroy(winner: String = "", score : Int = 0, yourScore: Int = 0) {
         (parent as ViewGroup).removeView(this)
         val intent = Intent(context, GameActivity::class.java)
         intent.putExtra("score", score)
+        intent.putExtra("yourScore", yourScore)
         intent.putExtra("winner", winner)
         intent.putExtra("gameType", 3)
         intent.putExtra("currentGame", 1)
