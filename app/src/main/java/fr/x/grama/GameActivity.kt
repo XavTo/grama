@@ -115,11 +115,6 @@ class GameActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         gramaClass.stopMusic()
-        if (gameViewOrto != null) {
-            gameViewOrto?.destroy()
-        } else if (gameViewDef != null) {
-            gameViewDef?.destroy()
-        }
         Choreographer.getInstance().removeFrameCallback {}
     }
 

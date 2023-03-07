@@ -191,8 +191,9 @@ class GameViewDef : View {
         canvas.restore()
     }
 
-    fun destroy(winner: String = "", score : Int = 0, yourScore: Int = 0) {
-        (parent as ViewGroup).removeView(this)
+    fun destroy(winner: String = "", score : Int = 0, yourScore: Int = 0, isPause : Boolean = false) {
+        if (!isPause)
+            (parent as ViewGroup).removeView(this)
         val intent = Intent(context, GameActivity::class.java)
         intent.putExtra("score", score)
         intent.putExtra("yourScore", yourScore)

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_grey"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
@@ -27,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/duel"></TextView>
+                android:text="@string/duel" />
 
             <TextView
                 android:id="@+id/prof_error"
@@ -37,7 +36,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/error"
-                android:visibility="gone"></TextView>
+                android:visibility="gone" />
 
             <EditText
                 android:id="@+id/adresse_ip"
@@ -51,7 +50,7 @@
                 android:gravity="center"
                 android:hint="@string/ip"
                 android:inputType="textEmailAddress"
-                android:textSize="30sp"></EditText>
+                android:textSize="30sp" />
 
             <EditText
                 android:id="@+id/port"
@@ -64,7 +63,7 @@
                 android:gravity="center"
                 android:hint="@string/port"
                 android:inputType="number"
-                android:textSize="30sp"></EditText>
+                android:textSize="30sp" />
 
             <Button
                 android:id="@+id/duel_connexion_button"
@@ -74,7 +73,7 @@
                 android:layout_marginBottom="15dp"
                 android:background="@color/black"
                 android:text="@string/connexion"
-                android:textColor="@color/white"></Button>
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/duel_host_button"
@@ -84,7 +83,7 @@
                 android:layout_marginBottom="15dp"
                 android:background="@color/black"
                 android:text="@string/host"
-                android:textColor="@color/white"></Button>
+                android:textColor="@color/white" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

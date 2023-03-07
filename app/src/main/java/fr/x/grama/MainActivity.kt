@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         if (UserInfo.sp == null) {
             UserInfo.setSp(this)
         }
+        gramaClass.waitForUserInput()
         UserInfo.email = UserInfo.sp?.getString("Unm", "").toString()
         UserInfo.pseudo = UserInfo.sp?.getString("Psw", "").toString()
         UserInfo.wins = UserInfo.sp?.getInt("Wins", 0)!!
